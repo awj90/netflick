@@ -1,0 +1,29 @@
+.navbar .navbar-brand {
+  color: #e50914;
+  font-weight: bold;
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #e50914;
+}
+
+.canvas {
+  transform: scale(0.5);
+  position: absolute;
+  top: -119px;
+  right: -158px;
+  z-index: 2;
+}
+
+.video-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 640px;
+  height: 480px;
+  z-index: 9999;
+}
+
+.black-background {
+  background-color: black;
+}
