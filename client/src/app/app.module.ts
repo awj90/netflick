@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-// import { YouTubePlayerModule } from '@angular/youtube-player';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,9 +14,10 @@ import { MovieDetailsComponent } from './components/movie-details.component';
 
 import { MovieService } from './services/movie.service';
 import { HandGestureService } from './services/hand-gesture.service';
+import { MoviePlayerComponent } from './components/movie-player.component';
 
 @NgModule({
-  declarations: [AppComponent, MoviesComponent, MovieDetailsComponent],
+  declarations: [AppComponent, MoviesComponent, MovieDetailsComponent, MoviePlayerComponent],
   imports: [
     BrowserModule,
     CommonModule,
@@ -24,7 +25,7 @@ import { HandGestureService } from './services/hand-gesture.service';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    // YouTubePlayerModule,
+    YouTubePlayerModule,
   ],
   providers: [MovieService, HandGestureService],
   bootstrap: [AppComponent],

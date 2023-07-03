@@ -13,7 +13,7 @@
       <p class="mt-2 mb-2">Duration: {{ movie.video_duration }}</p>
       <p class="mt-2 mb-3">Genre(s): {{ movie.genre }}</p>
       <a class="btn btn-md" [routerLink]="['/', 'movies']">Back</a> &nbsp;
-      <a class="btn btn-md" href="#" target="_blank">Watch Movie</a>
+      <a class="btn btn-md" [routerLink]="['./player']">Watch Movie</a>
     </div>
   </div>
 </div>
