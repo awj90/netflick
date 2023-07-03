@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TrendingMovie } from '../models/trending-movie';
 import { MovieService } from '../services/movie.service';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { filter, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { Movie } from '../models/movie';
 
 @Component({
   selector: 'app-movies',
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./movies.component.css'],
 })
 export class MoviesComponent implements OnInit, OnDestroy {
-  trendingMovies: TrendingMovie[] = [];
+  movies: Movie[] = [];
   carouselIndex: number = 0;
   swipeSubscription$!: Subscription;
   selectSubscription$!: Subscription;
@@ -25,7 +25,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.getTrendingMovies();
+    this.getMovies();
     this.handGestureService.resetLast();
     this.swipeSubscription$ = this.handGestureService.swipe$
       .pipe(
@@ -54,37 +54,33 @@ export class MoviesComponent implements OnInit, OnDestroy {
 
   moveCarousel(direction: string) {
     if (direction === 'right') {
-      if (this.carouselIndex >= this.trendingMovies.length) {
+      if (this.carouselIndex >= this.movies.length) {
         this.carouselIndex = 0;
       }
       this.carouselIndex++;
     } else {
       if (this.carouselIndex <= 0) {
-        this.carouselIndex = this.trendingMovies.length - 1;
+        this.carouselIndex = this.movies.length - 1;
       }
       this.carouselIndex--;
     }
   }
 
   navigateToMovieDetails(index: number) {
-    this.carouselIndex = index;
-    this.storage.setItem('selectedMovie', this.carouselIndex.toString());
-    this.router.navigate(['movie', this.trendingMovies[this.carouselIndex].id]);
+    this.storage.setItem('selectedMovieCarouselIndex', index.toString());
+    this.router.navigate(['movie', this.movies[index].id]);
   }
 
-  getTrendingMovies() {
-    const value = this.storage.getItem('trendingMovies');
+  getMovies() {
+    const value = this.storage.getItem('movies');
     if (value === null) {
-      this.movieService.getTrendingMovies().subscribe((results) => {
-        this.trendingMovies = results.results;
-        this.storage.setItem(
-          'trendingMovies',
-          JSON.stringify(this.trendingMovies)
-        );
+      this.movieService.getMovies().subscribe((results) => {
+        this.movies = results;
+        this.storage.setItem('movies', JSON.stringify(results));
       });
     } else {
-      this.trendingMovies = JSON.parse(value);
-      const index = this.storage.getItem('selectedMovie');
+      this.movies = JSON.parse(value);
+      const index = this.storage.getItem('selectedMovieCarouselIndex');
       if (index !== null) {
         this.carouselIndex = +index;
       }

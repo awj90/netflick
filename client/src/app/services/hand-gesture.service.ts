@@ -111,9 +111,10 @@ export class HandGestureService {
         this._emitGesture &&
         this._toSeconds(Date.now() - this._lastGestureTimestamp) > 1
       ) {
-        if (this._lastGesture)
+        if (this._lastGesture) {
           this._gesture$.next(GestureMap[this._lastGesture]);
-        this._emitGesture = false;
+          this._emitGesture = false;
+        }
       }
     }
   }

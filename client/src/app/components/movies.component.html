@@ -2,21 +2,19 @@
 <div id="carousel" class="carousel carousel-dark slide">
   <div class="carousel-inner">
     <div
-      *ngFor="let trendingMovie of trendingMovies; let i = index"
+      *ngFor="let movie of movies; let i = index"
       [ngClass]="i === carouselIndex ? 'carousel-item active' : 'carousel-item'"
     >
       <img
-        src="https://image.tmdb.org/t/p/original/{{
-          trendingMovie.backdrop_path
-        }}"
+        src="https://i3.ytimg.com/vi/{{ movie.video_id }}/maxresdefault.jpg"
         class="d-block w-100"
-        alt="{{ trendingMovie.original_title }}"
+        alt="{{ movie.title }}"
         (click)="navigateToMovieDetails(i)"
         style="cursor: pointer"
       />
       <div class="carousel-caption d-none d-md-block">
-        <h1>{{ trendingMovie.original_title }}</h1>
-        <p>{{ trendingMovie.overview }}</p>
+        <h1>{{ movie.title }}</h1>
+        <p>{{ movie.description }}</p>
       </div>
     </div>
   </div>

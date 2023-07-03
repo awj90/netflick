@@ -74,7 +74,7 @@ oneFingerGesture.addCurl(
 export const GE = new fingerpose.GestureEstimator([
   fingerpose.Gestures.VictoryGesture,
   fingerpose.Gestures.ThumbsUpGesture,
-  // thumbsDownGesture,
   oneFingerGesture,
+  // thumbsDownGesture,
   // rockGesture,
 ]);
