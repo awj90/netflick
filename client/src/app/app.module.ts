@@ -14,6 +14,7 @@ import { MovieDetailsComponent } from './components/movie-details.component';
 import { MoviePlayerComponent } from './components/movie-player.component';
 import { LoginComponent } from './components/login.component';
 import { AuthStatusComponent } from './components/auth-status.component';
+import { DonationFormComponent } from './components/donation-form.component';
 
 import { OktaAuthModule, OktaConfig } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
@@ -35,6 +36,7 @@ const moduleConfig: OktaConfig = { oktaAuth };
     MoviePlayerComponent,
     LoginComponent,
     AuthStatusComponent,
+    DonationFormComponent,
   ],
   imports: [
     BrowserModule,

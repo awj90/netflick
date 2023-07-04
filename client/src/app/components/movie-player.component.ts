@@ -4,6 +4,7 @@ import { MovieService } from '../services/movie.service';
 import { Subscription, filter, map, tap } from 'rxjs';
 import { Movie } from '../models/movie';
 import { HandGestureService } from '../services/hand-gesture.service';
+import { ViewHistory } from '../models/view-history';
 
 declare var YT: any;
 
@@ -19,6 +20,7 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
   swipeSubscription$!: Subscription;
   selectSubscription$!: Subscription;
   intervalId!: any;
+  storage: Storage = sessionStorage;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -67,7 +69,9 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.saveViewHistory();
     this.swipeSubscription$.unsubscribe();
+    this.selectSubscription$.unsubscribe();
   }
 
   // create an <iframe> (and YouTube player)
@@ -122,17 +126,6 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  // rewind() {
-  //   const currentTime = this.player.getCurrentTime();
-  //   if (currentTime > 10) {
-  //     this.player.seekTo(currentTime - 10, true);
-  //     this.player.playVideo();
-  //   } else {
-  //     this.player.seekTo(0, false);
-  //     this.player.playVideo();
-  //   }
-  // }
-
   getMovieById(id: number) {
     this.movieService
       .getMovieById(id)
@@ -144,5 +137,18 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
         this.videoId = id;
         this.initYT();
       });
+  }
+
+  saveViewHistory() {
+    const user = this.storage.getItem('user');
+    if (!!user) {
+      const userEmail: string = JSON.parse(user).email;
+      const viewHistory: ViewHistory = {
+        email: userEmail,
+        movie_id: this.movie.id,
+        time_elapsed: Math.round(this.player.getCurrentTime()),
+      };
+      this.movieService.saveViewHistory(viewHistory);
+    }
   }
 }

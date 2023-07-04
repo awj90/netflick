@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { OktaAuthGuard, OktaCallbackComponent } from '@okta/okta-angular';
+import { authGuard } from './utils/auth-guard';
 import { MoviesComponent } from './components/movies.component';
 import { MovieDetailsComponent } from './components/movie-details.component';
 import { MoviePlayerComponent } from './components/movie-player.component';
 import { LoginComponent } from './components/login.component';
-import { authGuard } from './utils/auth-guard';
+import { DonationFormComponent } from './components/donation-form.component';
 
 const appRoutes: Routes = [
+  { path: 'donate', component: DonationFormComponent },
   { path: 'login/callback', component: OktaCallbackComponent },
   { path: 'login', component: LoginComponent },
   {

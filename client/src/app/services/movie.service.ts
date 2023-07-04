@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Movie } from '../models/movie';
 import { environment } from 'src/environments/environment.development';
+import { ViewHistory } from '../models/view-history';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,13 @@ export class MovieService {
   getMovieById(id: number): Observable<Movie> {
     return this.http.get<Movie>(
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movie/${id}`
+    );
+  }
+
+  saveViewHistory(viewHistory: ViewHistory): void {
+    this.http.post<ViewHistory>(
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/save`,
+      viewHistory
     );
   }
 }

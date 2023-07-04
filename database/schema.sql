@@ -35,7 +35,7 @@ CREATE TABLE `movies` (
   `language_id` int NOT NULL,
   `video_duration` varchar(255) NOT NULL,
   `genre` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   unique (`video_id`),
 	foreign key(`language_id`) references languages(`id`)
 );
@@ -46,3 +46,14 @@ FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
+
+DROP TABLE IF EXISTS `view_history`;
+CREATE TABLE `view_history` (
+  `id` int NOT NULL auto_increment,
+  `email` varchar(255) NOT NULL,
+  `movie_id` int NOT NULL,
+  `time_elapsed` int NOT NULL,
+  PRIMARY KEY (`id`),
+  unique (`email`, `movie_id`),
+  foreign key(`movie_id`) references movies(`id`)
+);
