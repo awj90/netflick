@@ -1,11 +1,21 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { OktaAuthGuard, OktaCallbackComponent } from '@okta/okta-angular';
 import { MoviesComponent } from './components/movies.component';
 import { MovieDetailsComponent } from './components/movie-details.component';
 import { MoviePlayerComponent } from './components/movie-player.component';
+import { LoginComponent } from './components/login.component';
+import { authGuard } from './utils/auth-guard';
 
-const routes: Routes = [
-  { path: 'movie/:id/player', component: MoviePlayerComponent },
+const appRoutes: Routes = [
+  { path: 'login/callback', component: OktaCallbackComponent },
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'movie/:id/player',
+    component: MoviePlayerComponent,
+    canActivate: [OktaAuthGuard],
+    data: { onAuthRequired: authGuard },
+  },
   { path: 'movie/:id', component: MovieDetailsComponent },
   { path: 'movies', component: MoviesComponent },
   { path: '', redirectTo: '/movies', pathMatch: 'full' },
@@ -13,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
