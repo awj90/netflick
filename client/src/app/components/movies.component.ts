@@ -48,6 +48,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // clean up subscriptions
     this.swipeSubscription$.unsubscribe();
     this.selectSubscription$.unsubscribe();
   }
@@ -67,7 +68,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
   }
 
   navigateToMovieDetails(index: number) {
-    this.storage.setItem('selectedMovieCarouselIndex', index.toString());
+    this.storage.setItem('selectedMovieCarouselIndex', index.toString()); // use session storage to persist carousel position if user wishes to select another movie
     this.router.navigate(['movie', this.movies[index].id]);
   }
 

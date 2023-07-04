@@ -20,7 +20,7 @@ export class AppComponent implements AfterViewInit {
   navbg: any;
 
   constructor(
-    private _recognizer: HandGestureService,
+    private handGestureService: HandGestureService,
     private _router: Router
   ) {}
 
@@ -35,11 +35,11 @@ export class AppComponent implements AfterViewInit {
   }
 
   get stream(): MediaStream {
-    return this._recognizer.stream;
+    return this.handGestureService.stream;
   }
 
   ngAfterViewInit(): void {
-    this._recognizer.initialize(
+    this.handGestureService.initialize(
       this.canvas.nativeElement,
       this.video.nativeElement
     );

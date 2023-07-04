@@ -53,7 +53,7 @@ export class DonationFormComponent implements OnInit {
           CustomValidators.whiteSpaceCheck,
         ]),
       }),
-      creditCardDetails: this.fb.group({}),
+      creditCardDetails: this.fb.group({}), // managed by stripe API
     });
   }
 }

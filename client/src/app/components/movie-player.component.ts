@@ -40,9 +40,9 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
       .subscribe((direction) => {
         clearInterval(this.intervalId);
         if (direction === 'left') {
-          this.rewind();
+          this.rewind(); // swipe left to rewind video
         } else if (direction === 'right') {
-          this.ff();
+          this.ff(); // swipe right to fast forward video
         }
       });
     this.selectSubscription$ = this.handGestureService.gesture$
@@ -58,7 +58,7 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
             // player was paused, unpause it
             this.player.playVideo();
           } else {
-            // pause the player if it is not currently paused
+            // pause the player if it not currently paused
             this.player.pauseVideo();
           }
         }
@@ -69,20 +69,21 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.saveViewHistory();
+    // clean up subscriptions
     this.swipeSubscription$.unsubscribe();
     this.selectSubscription$.unsubscribe();
+    this.saveViewHistory(); // posts (or puts if existing) movie elapsed time to springboot backend for future retrieval if user returns back to watch the same movie
   }
 
-  // create an <iframe> (and YouTube player)
+  // create a YouTube player
   initYT() {
     this.player = new YT.Player('player', {
-      videoId: this.videoId,
-      height: '100%',
-      width: '100%',
+      videoId: this.videoId, // youtube videoId
+      height: '100%', // full screen
+      width: '100%', // full screen
       playerVars: {
-        autoplay: 1,
-        controls: 1,
+        autoplay: 1, // autoplay
+        controls: 1, // display controls
         start: 0,
         rel: 0,
         fs: 1,
@@ -92,38 +93,37 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
         origin: 'http://localhost:4200',
       },
       events: {
-        onReady: this.onPlayerReady.bind(this),
+        onReady: this.onPlayerReady.bind(this), // configure YouTube iframe player API to call onPlayerReady() when the video player is ready
       },
     });
   }
 
-  // YT iframe player API calls this function when the video player is ready
   onPlayerReady(event: any) {
     event.target.playVideo();
   }
 
-  // function to stop video
+  // stop video
   stopVideo() {
     this.player.stopVideo();
     this.router.navigate(['../'], { relativeTo: this.activatedRoute });
   }
 
   // fastforward video
-
   ff() {
     let currentVideoTime: number = this.player.getCurrentTime();
     this.intervalId = setInterval(() => {
       currentVideoTime += 10;
       this.player.seekTo(currentVideoTime, true);
-    }, 1000);
+    }, 1000); // use interval to keep fastforwarding until stopped
   }
+
   // rewind video
   rewind() {
     let currentVideoTime: number = this.player.getCurrentTime();
     this.intervalId = setInterval(() => {
       currentVideoTime -= 10;
       this.player.seekTo(currentVideoTime, true);
-    }, 1000);
+    }, 1000); // use interval to keep rewinding until stopped
   }
 
   getMovieById(id: number) {

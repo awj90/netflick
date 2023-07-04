@@ -44,6 +44,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+     // clean up subscriptions
     this.selectSubscription$.unsubscribe();
   }
 

@@ -42,6 +42,7 @@ export class AuthStatusComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // clean up subscriptions
     this.authState$.unsubscribe();
   }
 

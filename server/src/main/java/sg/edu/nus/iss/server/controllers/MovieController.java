@@ -27,7 +27,7 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping(path="/movies")
+    @GetMapping(path="/movies", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getAllMovies(@RequestParam(required = false, defaultValue= "10") String limit, @RequestParam(required = false, defaultValue = "0") String offset) {
         List<Movie> movies = this.movieService.getAllMovies(Integer.parseInt(limit), Integer.parseInt(offset));
@@ -42,7 +42,7 @@ public class MovieController {
 							.body(jsonArrayBuilder.build().toString());
     }
 
-    @GetMapping(path="/movie/{id}")
+    @GetMapping(path="/movie/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getMovieById(@PathVariable Integer id) {
         Optional<Movie> opt = this.movieService.getMovieById(id);
@@ -54,7 +54,7 @@ public class MovieController {
 
     @PostMapping(path="/save", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> saveHistory() {
+    public ResponseEntity<String> saveViewHistory() {
         return null;
     }
 }

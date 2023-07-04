@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         issuer: appConfig.oidc.issuer,
         scopes: appConfig.oidc.scopes,
       },
-      idps: [{ type: 'google', id: '0oaa4ln3j3jNcmCFR5d7' }],
+      idps: [{ type: 'google', id: '0oaa4ln3j3jNcmCFR5d7' }], // provision google social log in
     });
   }
 
