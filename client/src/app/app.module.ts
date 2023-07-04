@@ -17,7 +17,12 @@ import { HandGestureService } from './services/hand-gesture.service';
 import { MoviePlayerComponent } from './components/movie-player.component';
 
 @NgModule({
-  declarations: [AppComponent, MoviesComponent, MovieDetailsComponent, MoviePlayerComponent],
+  declarations: [
+    AppComponent,
+    MoviesComponent,
+    MovieDetailsComponent,
+    MoviePlayerComponent,
+  ],
   imports: [
     BrowserModule,
     CommonModule,
