@@ -11,13 +11,14 @@ import { firstValueFrom } from 'rxjs';
 import { LocationService } from '../services/location.service';
 import { State } from '../models/state';
 import { User } from '../models/user';
+import { BeforeLeavingComponent } from '../utils/form-guard';
 
 @Component({
   selector: 'app-donation-form',
   templateUrl: './donation-form.component.html',
   styleUrls: ['./donation-form.component.css'],
 })
-export class DonationFormComponent implements OnInit {
+export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
   form!: FormGroup;
   loading: boolean = true;
   countries: Country[] = [];
@@ -100,10 +101,40 @@ export class DonationFormComponent implements OnInit {
     const donor = this.storage.getItem('user');
     if (!!donor) {
       const user: User = JSON.parse(donor);
-      this.form.get(['customerDetails', 'email'])?.setValue(user.email);
-      this.form.get(['customerDetails', 'firstName'])?.setValue(user.firstName);
-      this.form.get(['customerDetails', 'lastName'])?.setValue(user.lastName);
-      this.form.get('customerDetails')?.disable();
+      this.form.get(['userDetails', 'email'])?.setValue(user.email);
+      this.form.get(['userDetails', 'firstName'])?.setValue(user.firstName);
+      this.form.get(['userDetails', 'lastName'])?.setValue(user.lastName);
+      this.form.get('userDetails')?.disable();
     }
+  }
+
+  getStatesForSelectedCountry($event: any): void {
+    // user selected a new country, refresh the list of states
+    this.form.get(['billingAddress', 'state'])?.reset();
+    this.states = [];
+    firstValueFrom(this.locationService.getStatesByCountryCode($event.value))
+      .then((states) => {
+        this.states = states;
+      })
+      .catch((err: any) => {
+        alert(err);
+        console.info(err);
+      });
+  }
+
+  handlePayment() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return; // do nothing and display all error messages if form is still invalid
+    }
+    console.info(this.form.value);
+  }
+
+  formNotSaved(): boolean {
+    return this.form.dirty;
+  }
+
+  confirmMessage(): string {
+    return 'You have not completed the form submission.\nAre you sure you want to leave this page?';
   }
 }

@@ -1,4 +1,8 @@
-<form class="donation-form center" [formGroup]="form">
+<form
+  class="donation-form center"
+  [formGroup]="form"
+  (submit)="handlePayment()"
+>
   <div formGroupName="userDetails" class="form-area">
     <h2>Donor Details</h2>
     <div class="row mb-5">
@@ -94,7 +98,11 @@
         color="warn"
       >
         <mat-label>Country</mat-label>
-        <mat-select formControlName="country" required>
+        <mat-select
+          formControlName="country"
+          required
+          (selectionChange)="getStatesForSelectedCountry($event)"
+        >
           <mat-option
             *ngFor="let country of countries"
             [value]="country.code"
@@ -216,5 +224,18 @@
       </table>
     </div>
   </div>
-  <h3>Credit/Debit Card Details</h3>
+  <div formGroupName="creditCardDetails" class="form-area">
+    <h2>Credit/Debit Card Details</h2>
+    <div class="button-row">
+      <button
+        mat-stroked-button
+        color="accent"
+        type="button"
+        [routerLink]="['/movies']"
+      >
+        Back</button
+      >&nbsp;
+      <button mat-stroked-button color="warn" type="submit">Confirm</button>
+    </div>
+  </div>
 </form>

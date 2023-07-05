@@ -37,3 +37,8 @@
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+.button-row {
+  display: table-cell;
+  max-width: 600px;
+}
