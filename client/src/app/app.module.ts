@@ -21,8 +21,16 @@ import { OktaAuth } from '@okta/okta-auth-js';
 
 import { MovieService } from './services/movie.service';
 import { HandGestureService } from './services/hand-gesture.service';
+import { LocationService } from './services/location.service';
 
 import appConfig from './configs/app-config';
+
+import { MaterialModule } from './material.module';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import {
+  ErrorStateMatcher,
+  ShowOnDirtyErrorStateMatcher,
+} from '@angular/material/core';
 
 const oktaConfig = appConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
@@ -46,9 +54,19 @@ const moduleConfig: OktaConfig = { oktaAuth };
     BrowserAnimationsModule,
     CommonModule,
     YouTubePlayerModule,
+    MaterialModule,
     OktaAuthModule.forRoot(moduleConfig),
   ],
-  providers: [MovieService, HandGestureService],
+  providers: [
+    MovieService,
+    HandGestureService,
+    LocationService,
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline', floatLabel: 'auto' },
+    },
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

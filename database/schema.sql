@@ -3,6 +3,7 @@ drop database if exists moviedb;
 create database moviedb;
 use moviedb;
 
+-- genres
 DROP TABLE IF EXISTS `genres`;
 CREATE TABLE `genres` (
   `id` int NOT NULL auto_increment,
@@ -14,6 +15,7 @@ insert into genres
 values 
 (1, 'Action'), (2, 'Adventure'), (3, 'Comedy'), (4, 'Drama'), (5, 'Family'), (6, 'Horror'), (7, 'Romance'), (8, 'Sci-Fi'), (9, 'Thriller'), (10, 'War');
 
+-- languages
 DROP TABLE IF EXISTS `languages`;
 CREATE TABLE `languages` (
   `id` int NOT NULL auto_increment,
@@ -26,6 +28,7 @@ CREATE TABLE `languages` (
 insert into languages
 values (1, 'en', 'English'), (2, 'en-US', 'English (American)'), (3, 'en-GB', 'English (British)');
 
+-- movies
 DROP TABLE IF EXISTS `movies`;
 CREATE TABLE `movies` (
   `id` int NOT NULL auto_increment,
@@ -42,6 +45,40 @@ CREATE TABLE `movies` (
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/movies.csv' 
 INTO TABLE movies 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
+
+-- countries
+DROP TABLE IF EXISTS `countries`;
+CREATE TABLE `countries` (
+  `id` int NOT NULL auto_increment,
+  `code` char(2) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  unique (`code`)
+);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/countries.csv' 
+INTO TABLE countries 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
+
+-- states
+DROP TABLE IF EXISTS `states`;
+CREATE TABLE `states` (
+  `id` int NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `country_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  foreign key(`country_id`) references countries(`id`)
+);
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/states.csv' 
+INTO TABLE states 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'

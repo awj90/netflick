@@ -1,1 +1,220 @@
-<p>donation-form works!</p>
+<form class="donation-form center" [formGroup]="form">
+  <div formGroupName="userDetails" class="form-area">
+    <h2>Donor Details</h2>
+    <div class="row mb-5">
+      <table class="full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field
+              class="full-width"
+              appearance="outline"
+              floatLabel="auto"
+              color="warn"
+            >
+              <mat-label>First Name</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Your given name"
+                formControlName="firstName"
+                required
+              />
+            </mat-form-field>
+            <mat-error
+              *ngIf="
+                form.get('userDetails.firstName')?.invalid &&
+                form.get('userDetails.firstName')?.touched
+              "
+              class="error"
+              >Please enter your given name</mat-error
+            >
+          </td>
+          <td>
+            <mat-form-field
+              class="full-width"
+              appearance="outline"
+              floatLabel="auto"
+              color="warn"
+            >
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Your family name"
+                formControlName="lastName"
+                required
+              />
+            </mat-form-field>
+            <mat-error
+              *ngIf="
+                form.get('userDetails.lastName')?.invalid &&
+                form.get('userDetails.lastName')?.touched
+              "
+              class="error"
+              >Please enter your family name</mat-error
+            >
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="row">
+      <p>
+        <mat-form-field
+          class="full-width"
+          appearance="outline"
+          floatLabel="auto"
+          color="warn"
+          ><mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            placeholder="Ex. example@email.com"
+            formControlName="email"
+            required
+        /></mat-form-field>
+        <mat-error
+          *ngIf="
+            form.get('userDetails.email')?.invalid &&
+            form.get('userDetails.email')?.touched
+          "
+          class="error"
+          >Please enter a valid email</mat-error
+        >
+      </p>
+    </div>
+  </div>
+
+  <div formGroupName="billingAddress" class="form-area">
+    <h2>Billing Address</h2>
+    <div class="row mb-5">
+      <mat-form-field
+        class="full-width"
+        appearance="outline"
+        floatLabel="auto"
+        color="warn"
+      >
+        <mat-label>Country</mat-label>
+        <mat-select formControlName="country" required>
+          <mat-option
+            *ngFor="let country of countries"
+            [value]="country.code"
+            >{{ country.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-error
+        *ngIf="
+          form.get('billingAddress.country')?.invalid &&
+          form.get('billingAddress.country')?.touched
+        "
+        class="error"
+        >Please select a country</mat-error
+      >
+    </div>
+    <div class="row mb-5">
+      <p>
+        <mat-form-field
+          class="full-width"
+          appearance="outline"
+          floatLabel="auto"
+          color="warn"
+        >
+          <mat-label>Address</mat-label>
+          <textarea
+            matInput
+            type="text"
+            placeholder="Ex. 100 Main St"
+            formControlName="address"
+            required
+          ></textarea>
+        </mat-form-field>
+        <mat-error
+          *ngIf="
+            form.get('billingAddress.address')?.invalid &&
+            form.get('billingAddress.address')?.touched
+          "
+          class="error"
+          >Please input an address</mat-error
+        >
+      </p>
+    </div>
+    <div class="row">
+      <table class="full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field
+              class="full-width"
+              appearance="outline"
+              floatLabel="auto"
+              color="warn"
+            >
+              <mat-label>City</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ex. San Francisco"
+                formControlName="city"
+              />
+            </mat-form-field>
+            <mat-error
+              *ngIf="
+                form.get('billingAddress.city')?.invalid &&
+                form.get('billingAddress.city')?.touched
+              "
+              class="error"
+              >Please input a city name</mat-error
+            >
+          </td>
+          <td>
+            <mat-form-field
+              class="full-width"
+              appearance="outline"
+              floatLabel="auto"
+              color="warn"
+            >
+              <mat-label>State</mat-label>
+              <mat-select formControlName="state" required>
+                <mat-option *ngFor="let state of states" [value]="state.name">{{
+                  state.name
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error
+              *ngIf="
+                form.get('billingAddress.state')?.invalid &&
+                form.get('billingAddress.state')?.touched
+              "
+              class="error"
+              >Please select a state</mat-error
+            >
+          </td>
+          <td>
+            <mat-form-field
+              class="full-width"
+              appearance="outline"
+              floatLabel="auto"
+              color="warn"
+            >
+              <mat-label>Postal Code</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ex. 94105"
+                formControlName="zipCode"
+              />
+            </mat-form-field>
+            <mat-error
+              *ngIf="
+                form.get('billingAddress.zipCode')?.invalid &&
+                form.get('billingAddress.zipCode')?.touched
+              "
+              class="error"
+              >Please input a postal code</mat-error
+            >
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <h3>Credit/Debit Card Details</h3>
+</form>

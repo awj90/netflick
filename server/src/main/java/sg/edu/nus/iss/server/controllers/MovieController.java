@@ -110,6 +110,5 @@ public class MovieController {
                                             .add("elapsed_time", 0)
 											.build()
 											.toString());
-        
     }
 }
