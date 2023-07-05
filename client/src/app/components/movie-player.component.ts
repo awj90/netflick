@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovieService } from '../services/movie.service';
-import { Subscription, filter, map, tap } from 'rxjs';
+import { Subscription, filter, firstValueFrom, map, tap } from 'rxjs';
 import { Movie } from '../models/movie';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { ViewHistory } from '../models/view-history';
@@ -17,6 +17,8 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
   player: any;
   videoId!: string;
   movie!: Movie;
+  userEmail!: string;
+  elapsedTime!: number;
   swipeSubscription$!: Subscription;
   selectSubscription$!: Subscription;
   intervalId!: any;
@@ -30,8 +32,19 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // get email
+    const user = this.storage.getItem('user');
+    if (!!user) {
+      this.userEmail = JSON.parse(user).email;
+    }
+
+    // get movieId
     const movieId: number = +this.activatedRoute.snapshot.params['id'];
-    this.getMovieById(movieId);
+
+    // get the movie timestamp at which the user last stopped watching to resume playing from there
+    this.getViewHistory(this.userEmail, movieId);
+
+    // subscribe to hand gesture detection
     this.swipeSubscription$ = this.handGestureService.swipe$
       .pipe(
         tap((value) => console.info('Swiped: ', value)),
@@ -63,7 +76,8 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
           }
         }
         if (value === 'ok') {
-          this.stopVideo();
+          this.player.stopVideo();
+          this.router.navigate(['../'], { relativeTo: this.activatedRoute });
         }
       });
   }
@@ -75,6 +89,39 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     this.saveViewHistory(); // posts (or puts if existing) movie elapsed time to springboot backend for future retrieval if user returns back to watch the same movie
   }
 
+  getViewHistory(email: string, movieId: number) {
+    firstValueFrom(this.movieService.getViewHistory(email, movieId)).then(
+      (result) => {
+        this.elapsedTime = +result.elapsed_time;
+        this.getMovieById(movieId);
+      }
+    );
+  }
+
+  saveViewHistory() {
+    const viewHistory: ViewHistory = {
+      email: this.userEmail,
+      movie_id: this.movie.id.toString(),
+      time_elapsed: Math.round(this.player.getCurrentTime()).toString(),
+    };
+    firstValueFrom(this.movieService.saveViewHistory(viewHistory)).then(
+      () => {}
+    );
+  }
+
+  getMovieById(id: number) {
+    this.movieService
+      .getMovieById(id)
+      .pipe(
+        tap((movie) => (this.movie = movie)),
+        map((movie) => movie.video_id)
+      )
+      .subscribe((id) => {
+        this.videoId = id;
+        this.initYT();
+      });
+  }
+
   // create a YouTube player
   initYT() {
     this.player = new YT.Player('player', {
@@ -84,7 +131,7 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
       playerVars: {
         autoplay: 1, // autoplay
         controls: 1, // display controls
-        start: 0,
+        start: !!this.elapsedTime ? this.elapsedTime : 0,
         rel: 0,
         fs: 1,
         modestbranding: 1,
@@ -100,12 +147,6 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
 
   onPlayerReady(event: any) {
     event.target.playVideo();
-  }
-
-  // stop video
-  stopVideo() {
-    this.player.stopVideo();
-    this.router.navigate(['../'], { relativeTo: this.activatedRoute });
   }
 
   // fastforward video
@@ -124,31 +165,5 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
       currentVideoTime -= 10;
       this.player.seekTo(currentVideoTime, true);
     }, 1000); // use interval to keep rewinding until stopped
-  }
-
-  getMovieById(id: number) {
-    this.movieService
-      .getMovieById(id)
-      .pipe(
-        tap((movie) => (this.movie = movie)),
-        map((movie) => movie.video_id)
-      )
-      .subscribe((id) => {
-        this.videoId = id;
-        this.initYT();
-      });
-  }
-
-  saveViewHistory() {
-    const user = this.storage.getItem('user');
-    if (!!user) {
-      const userEmail: string = JSON.parse(user).email;
-      const viewHistory: ViewHistory = {
-        email: userEmail,
-        movie_id: this.movie.id,
-        time_elapsed: Math.round(this.player.getCurrentTime()),
-      };
-      this.movieService.saveViewHistory(viewHistory);
-    }
   }
 }

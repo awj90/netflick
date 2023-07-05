@@ -1,33 +1,27 @@
 package sg.edu.nus.iss.server.models;
 
 public class ViewHistory {
-    private Integer id;
-    private String email;
-    private Integer movieId;
-    private Integer timeElapsed;
 
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private String email;
+    private String movieId;
+    private String timeElapsed;
+
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
     }
-    public Integer getMovieId() {
+    public String getMovieId() {
         return movieId;
     }
-    public void setMovieId(Integer movieId) {
+    public void setMovieId(String movieId) {
         this.movieId = movieId;
     }
-    public Integer getTimeElapsed() {
+    public String getTimeElapsed() {
         return timeElapsed;
     }
-    public void setTimeElapsed(Integer timeElapsed) {
+    public void setTimeElapsed(String timeElapsed) {
         this.timeElapsed = timeElapsed;
     }
 }

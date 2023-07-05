@@ -23,8 +23,11 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   movie$!: Promise<Movie>;
 
   ngOnInit(): void {
+    // get movie id from route and get movie by movie id
     const movieId: number = +this.activatedRoute.snapshot.params['id'];
     this.getMovieById(movieId);
+
+    // subscribe to hand gesture detection
     this.handGestureService.resetLast();
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
@@ -44,7 +47,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-     // clean up subscriptions
+    // clean up subscriptions
     this.selectSubscription$.unsubscribe();
   }
 

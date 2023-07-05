@@ -24,7 +24,6 @@ export class AuthStatusComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authState$ = this.oktaAuthStateService.authState$.subscribe(
       (authState) => {
-        console.info(authState);
         this.isAuthenticated = !!authState.isAuthenticated;
         if (this.isAuthenticated) {
           this.oktaAuth.getUser().then((userClaims) => {

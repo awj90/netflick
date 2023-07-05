@@ -47,13 +47,14 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
-DROP TABLE IF EXISTS `view_history`;
-CREATE TABLE `view_history` (
-  `id` int NOT NULL auto_increment,
-  `email` varchar(255) NOT NULL,
-  `movie_id` int NOT NULL,
-  `time_elapsed` int NOT NULL,
-  PRIMARY KEY (`id`),
-  unique (`email`, `movie_id`),
-  foreign key(`movie_id`) references movies(`id`)
-);
+-- Moved to Redis for faster retrieval
+-- DROP TABLE IF EXISTS `view_history`;
+-- CREATE TABLE `view_history` (
+--   `id` int NOT NULL auto_increment,
+--   `email` varchar(255) NOT NULL,
+--   `movie_id` int NOT NULL,
+--   `time_elapsed` int NOT NULL,
+--   PRIMARY KEY (`id`),
+--   unique (`email`, `movie_id`),
+--   foreign key(`movie_id`) references movies(`id`)
+-- );

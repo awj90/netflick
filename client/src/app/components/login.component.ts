@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.oktaSignIn.renderEl(
       {
-        el: '#okta-log-in-widget',
+        el: '#okta-log-in-widget', // render sign-in-widget
       },
       (response: any) => {
         if (response.status === 'SUCCESS') {
