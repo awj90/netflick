@@ -179,7 +179,10 @@
               color="warn"
             >
               <mat-label>State</mat-label>
-              <mat-select formControlName="state" required>
+              <mat-select formControlName="state" [required]="states.length > 0"
+                ><mat-option *ngIf="states.length < 1" [value]="'Nil'"
+                  >Nil</mat-option
+                >
                 <mat-option *ngFor="let state of states" [value]="state.name">{{
                   state.name
                 }}</mat-option>

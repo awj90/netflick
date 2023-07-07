@@ -33,9 +33,11 @@ public class PaymentService {
     private static final String CREDIT_CARD_STATEMENT_DISPLAY = "NETFLICK DONATION";
     private final List<String> AVAILABLE_PAYMENT_METHODS = new ArrayList<>(Arrays.asList("card"));
     private DonationRepository donationRepository;
+    private EmailService emailService;
 
-    public PaymentService(DonationRepository donationRepository, @Value("${stripe.secret.key}") String stripeSecretKey) {
+    public PaymentService(DonationRepository donationRepository, EmailService emailService, @Value("${stripe.secret.key}") String stripeSecretKey) {
         this.donationRepository = donationRepository;
+        this.emailService = emailService;
         Stripe.apiKey = stripeSecretKey; // initialize external Stripe API
     }
 
@@ -86,7 +88,7 @@ public class PaymentService {
             donation.setTransactionId(jsonObject.getString("transaction_id"));
             donation.setTimestamp(new Date().getTime());
             this.donationRepository.insertDonation(donation);
-            return donation.getTransactionId();
+            return this.emailService.sendDonationReceipt(donor, donation);
         } catch (IOException | DataAccessException ex) {
             throw new Exception(ex.getMessage());
         }

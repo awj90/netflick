@@ -102,7 +102,7 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
           Validators.required,
           CustomValidators.whiteSpaceCheck,
         ]),
-        state: new FormControl<string>('', [Validators.required]),
+        state: new FormControl<string>(''),
         zipCode: new FormControl<string>('', [
           Validators.required,
           CustomValidators.whiteSpaceCheck,
