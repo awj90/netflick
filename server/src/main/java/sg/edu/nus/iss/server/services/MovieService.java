@@ -12,6 +12,7 @@ import sg.edu.nus.iss.server.repositories.MovieRepository;
 
 @Service
 public class MovieService {
+    
     @Autowired
     private MovieRepository movieRepository;
 

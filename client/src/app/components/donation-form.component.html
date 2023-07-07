@@ -3,14 +3,15 @@
   [formGroup]="form"
   (submit)="handlePayment()"
 >
+  <!-- donor details: firstName, lastName, email -->
   <div formGroupName="userDetails" class="form-area">
     <h2>Donor Details</h2>
     <div class="row mb-5">
-      <table class="full-width" cellspacing="0">
+      <table class="full-width-compact" cellspacing="0">
         <tr>
           <td>
             <mat-form-field
-              class="full-width"
+              class="full-width-compact"
               appearance="outline"
               floatLabel="auto"
               color="warn"
@@ -35,7 +36,7 @@
           </td>
           <td>
             <mat-form-field
-              class="full-width"
+              class="full-width-compact"
               appearance="outline"
               floatLabel="auto"
               color="warn"
@@ -62,37 +63,36 @@
       </table>
     </div>
     <div class="row">
-      <p>
-        <mat-form-field
-          class="full-width"
-          appearance="outline"
-          floatLabel="auto"
-          color="warn"
-          ><mat-label>Email</mat-label>
-          <input
-            matInput
-            type="email"
-            placeholder="Ex. example@email.com"
-            formControlName="email"
-            required
-        /></mat-form-field>
-        <mat-error
-          *ngIf="
-            form.get('userDetails.email')?.invalid &&
-            form.get('userDetails.email')?.touched
-          "
-          class="error"
-          >Please enter a valid email</mat-error
-        >
-      </p>
+      <mat-form-field
+        class="full-width-compact"
+        appearance="outline"
+        floatLabel="auto"
+        color="warn"
+        ><mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          placeholder="Ex. example@email.com"
+          formControlName="email"
+          required
+      /></mat-form-field>
+      <mat-error
+        *ngIf="
+          form.get('userDetails.email')?.invalid &&
+          form.get('userDetails.email')?.touched
+        "
+        class="error"
+        >Please enter a valid email</mat-error
+      >
     </div>
   </div>
 
+  <!-- credit card billing address details -->
   <div formGroupName="billingAddress" class="form-area">
     <h2>Billing Address</h2>
-    <div class="row mb-5">
+    <div class="row mb-4">
       <mat-form-field
-        class="full-width"
+        class="full-width-compact"
         appearance="outline"
         floatLabel="auto"
         color="warn"
@@ -119,39 +119,37 @@
         >Please select a country</mat-error
       >
     </div>
-    <div class="row mb-5">
-      <p>
-        <mat-form-field
-          class="full-width"
-          appearance="outline"
-          floatLabel="auto"
-          color="warn"
-        >
-          <mat-label>Address</mat-label>
-          <textarea
-            matInput
-            type="text"
-            placeholder="Ex. 100 Main St"
-            formControlName="address"
-            required
-          ></textarea>
-        </mat-form-field>
-        <mat-error
-          *ngIf="
-            form.get('billingAddress.address')?.invalid &&
-            form.get('billingAddress.address')?.touched
-          "
-          class="error"
-          >Please input an address</mat-error
-        >
-      </p>
+    <div class="row mb-4">
+      <mat-form-field
+        class="full-width-compact"
+        appearance="outline"
+        floatLabel="auto"
+        color="warn"
+      >
+        <mat-label>Address</mat-label>
+        <textarea
+          matInput
+          type="text"
+          placeholder="Ex. 100 Main St"
+          formControlName="address"
+          required
+        ></textarea>
+      </mat-form-field>
+      <mat-error
+        *ngIf="
+          form.get('billingAddress.address')?.invalid &&
+          form.get('billingAddress.address')?.touched
+        "
+        class="error"
+        >Please input an address</mat-error
+      >
     </div>
-    <div class="row">
-      <table class="full-width" cellspacing="0">
+    <div class="row mb-4">
+      <table class="full-width-compact" cellspacing="0">
         <tr>
           <td>
             <mat-form-field
-              class="full-width"
+              class="full-width-compact"
               appearance="outline"
               floatLabel="auto"
               color="warn"
@@ -175,7 +173,7 @@
           </td>
           <td>
             <mat-form-field
-              class="full-width"
+              class="full-width-compact"
               appearance="outline"
               floatLabel="auto"
               color="warn"
@@ -198,7 +196,7 @@
           </td>
           <td>
             <mat-form-field
-              class="full-width"
+              class="full-width-compact"
               appearance="outline"
               floatLabel="auto"
               color="warn"
@@ -224,18 +222,88 @@
       </table>
     </div>
   </div>
-  <div formGroupName="creditCardDetails" class="form-area">
+
+  <!-- credit card amount, number, cvv -->
+  <div class="form-area">
     <h2>Credit/Debit Card Details</h2>
-    <div class="button-row">
-      <button
-        mat-stroked-button
-        color="accent"
-        type="button"
-        [routerLink]="['/movies']"
+    <div class="row mb-4">
+      <mat-form-field
+        class="full-width-compact"
+        appearance="outline"
+        floatLabel="auto"
+        color="warn"
       >
-        Back</button
-      >&nbsp;
-      <button mat-stroked-button color="warn" type="submit">Confirm</button>
+        <mat-label>Amount</mat-label>
+        <input
+          matInput
+          type="number"
+          step="1"
+          min="1"
+          class="example-right-align"
+          placeholder="in USD"
+          formControlName="amount"
+        />
+        <span matTextPrefix class="form-hint">$&nbsp;</span>
+        <span matTextSuffix class="form-hint">.00</span>
+      </mat-form-field>
+      <mat-error
+        *ngIf="form.get('amount')?.invalid && form.get('amount')?.touched"
+        class="error"
+        >Minimum transaction amount is 1 USD</mat-error
+      >
     </div>
+    <div class="row" formGroupName="creditCardDetails">
+      <div id="card-element" class="mb-3"></div>
+      <div id="card-errors" class="error"></div>
+    </div>
+  </div>
+  <div class="donation-area">
+    <table class="full-width-compact">
+      <tr>
+        <td>
+          <mat-form-field
+            class="full-width-compact"
+            appearance="outline"
+            floatLabel="auto"
+            color="warn"
+          >
+            <mat-label>Optional wishlist for donating</mat-label>
+            <textarea
+              matInput
+              type="text"
+              placeholder="Ex. Can we have this hand gesture 🫰 to rate movies please?"
+              formControlName="wishlist"
+              [maxlength]="WISHLIST_MAX_CHAR_LENGTH"
+              #input
+            ></textarea>
+            <mat-hint class="form-hint"
+              >Max {{ WISHLIST_MAX_CHAR_LENGTH }} characters</mat-hint
+            >
+            <mat-hint align="end" class="form-hint"
+              >{{ input.value.length }}/{{ WISHLIST_MAX_CHAR_LENGTH }}</mat-hint
+            >
+          </mat-form-field>
+        </td>
+        <td class="align-right">
+          <button
+            mat-stroked-button
+            color="accent"
+            type="button"
+            [routerLink]="['/movies']"
+          >
+            Back
+          </button>
+          &nbsp;
+          <button
+            mat-stroked-button
+            color="warn"
+            type="submit"
+            [disabled]="form.invalid || isCreditCardProcessing"
+          >
+            Confirm
+          </button>
+        </td>
+      </tr>
+    </table>
   </div>
 </form>

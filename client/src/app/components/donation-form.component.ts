@@ -12,6 +12,11 @@ import { LocationService } from '../services/location.service';
 import { State } from '../models/state';
 import { User } from '../models/user';
 import { BeforeLeavingComponent } from '../utils/form-guard';
+import { environment } from 'src/environments/environment.development';
+import { PaymentIntent } from '../models/payment-intent';
+import { PaymentService } from '../services/payment.service';
+import { Donation } from '../models/donation';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-donation-form',
@@ -25,10 +30,19 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
   states: State[] = [];
   storage: Storage = sessionStorage;
   currentCountryCode!: string;
+  stripe = Stripe(environment.stripePublishableKey); // initialize Stripe API
+  payment: PaymentIntent = new PaymentIntent(0, 'USD', ''); // initialize a new payment
+  cardElement: any; // render in #card-element template
+  creditCardErrors: any = ''; // render in #card-errors template
+  isCreditCardProcessing: boolean = false;
+  transactionId: string = '';
+  WISHLIST_MAX_CHAR_LENGTH = 1000;
 
   constructor(
     private fb: FormBuilder,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private paymentService: PaymentService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +50,7 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
 
     // initialize form group
     this.form = this.createForm();
+    this.setupStripeFormFields();
 
     // get list of all countries (for dropdown list of select options in billing address)
     firstValueFrom(this.locationService.getCountries()).then(
@@ -93,7 +108,65 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
           CustomValidators.whiteSpaceCheck,
         ]),
       }),
+      amount: new FormControl<number>(5, [
+        Validators.required,
+        Validators.min(1),
+      ]),
       creditCardDetails: this.fb.group({}), // managed by stripe API
+      wishlist: new FormControl<string>('', [
+        Validators.maxLength(this.WISHLIST_MAX_CHAR_LENGTH),
+      ]),
+    });
+  }
+
+  private setupStripeFormFields() {
+    // get handle to stripe library's elements
+    var elements = this.stripe.elements();
+
+    // style the stripe card element
+    var cardStyle = {
+      base: {
+        backgroundColor: '#000000',
+        iconColor: '#c4f0ff',
+        color: '#ffffff',
+        fontWeight: '500',
+        fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
+        fontSize: '16px',
+        fontSmoothing: 'antialiased',
+        ':-webkit-autofill': {
+          color: '#fce883',
+        },
+        '::placeholder': {
+          color: '#ffffff',
+        },
+      },
+      complete: {
+        iconColor: '#28B463',
+        color: '#28B463',
+      },
+      invalid: {
+        iconColor: '#E50914',
+        color: '#E50914',
+      },
+    };
+
+    // create a card element from handle
+    this.cardElement = elements.create('card', {
+      hidePostalCode: true,
+      style: cardStyle,
+    });
+
+    // inject created card element into template
+    this.cardElement.mount('#card-element');
+
+    // listen for change events and display credit card validation errors in template if any
+    this.cardElement.on('change', (event: any) => {
+      this.creditCardErrors = document.getElementById('card-errors');
+      if (event.complete) {
+        this.creditCardErrors.textContent = ''; // no errors to display
+      } else if (event.error) {
+        this.creditCardErrors.textContent = event.error.message;
+      }
     });
   }
 
@@ -127,7 +200,77 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
       this.form.markAllAsTouched();
       return; // do nothing and display all error messages if form is still invalid
     }
-    console.info(this.form.value);
+
+    const formFields: FormFields = this.form.getRawValue();
+
+    // set up payment object for posting to back end
+    this.payment.receiptEmail = formFields.userDetails.email;
+    this.payment.amount = Math.round(formFields.amount * 100); // payment amount is in cents
+
+    // set up donation object for posting to back end
+    const donation: Donation = {
+      donor: formFields.userDetails,
+      amount: formFields.amount,
+      wishlist: formFields.wishlist,
+    };
+
+    // post to backend if form has no errors
+    if (!this.form.invalid && this.creditCardErrors.textContent === '') {
+      this.isCreditCardProcessing = true;
+      this.paymentService
+        .createPaymentIntent(this.payment)
+        .subscribe((response) => {
+          this.transactionId = response.id;
+          this.stripe
+            .confirmCardPayment(
+              response.client_secret,
+              {
+                payment_method: {
+                  card: this.cardElement,
+                  billing_details: {
+                    email: donation.donor.email,
+                    name: `${donation.donor.firstName} ${donation.donor.lastName}`,
+                    address: {
+                      line1: formFields.billingAddress.address,
+                      city: formFields.billingAddress.city,
+                      state: formFields.billingAddress.state,
+                      postal_code: formFields.billingAddress.zipCode,
+                      country: formFields.billingAddress.country,
+                    },
+                  },
+                },
+              },
+              { handleActions: false }
+            )
+            .then((result: any) => {
+              if (result.error) {
+                // stripe transaction was not successful
+                alert(`Error: ${result.error.message}`);
+                this.isCreditCardProcessing = false;
+              } else {
+                // stripe transaction was successful
+                donation.transaction_id = this.transactionId;
+                this.paymentService.saveDonation(donation).subscribe({
+                  next: (response) => {
+                    alert(
+                      `Thank you for your kind donation!\nOur developers will do their best to make your wishlist come true 🫰\nTransaction id: ${donation.transaction_id}`
+                    );
+                    this.form = this.createForm();
+                    this.router.navigate(['/movies']);
+                    this.isCreditCardProcessing = false;
+                  },
+                  error: (error) => {
+                    alert(`Error: ${error.message}`);
+                    this.isCreditCardProcessing = false;
+                  },
+                });
+              }
+            });
+        });
+    } else {
+      this.form.markAllAsTouched();
+      return; // do nothing and display all error messages if credit card fields are invalid
+    }
   }
 
   formNotSaved(): boolean {
@@ -137,4 +280,29 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
   confirmMessage(): string {
     return 'You have not completed the form submission.\nAre you sure you want to leave this page?';
   }
+}
+
+interface FormFields {
+  userDetails: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  billingAddress: {
+    country: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  amount: number;
+  creditCardDetails?: {
+    cardType?: string;
+    nameOnCard?: string;
+    cardNumber?: string;
+    cvv?: string;
+    expirationYear?: number;
+    expirationMonth?: number;
+  };
+  wishlist: string;
 }

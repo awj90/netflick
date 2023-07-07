@@ -36,5 +36,4 @@ public class MovieRepository {
         }
         return Optional.of(Movie.create(rs));
     }
-    
 }

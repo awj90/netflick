@@ -84,14 +84,27 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 
--- Moved to Redis for faster retrieval
--- DROP TABLE IF EXISTS `view_history`;
--- CREATE TABLE `view_history` (
---   `id` int NOT NULL auto_increment,
---   `email` varchar(255) NOT NULL,
---   `movie_id` int NOT NULL,
---   `time_elapsed` int NOT NULL,
---   PRIMARY KEY (`id`),
---   unique (`email`, `movie_id`),
---   foreign key(`movie_id`) references movies(`id`)
--- );
+-- donors
+DROP TABLE IF EXISTS `donors`;
+CREATE TABLE `donors` (
+  `id` int NOT NULL auto_increment,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  unique (`email`),
+  PRIMARY KEY (`id`)
+);
+
+-- donations
+DROP TABLE IF EXISTS `donations`;
+CREATE TABLE `donations` (
+  `id` int NOT NULL auto_increment,
+  `amount` int NOT NULL,
+  `wishlist` TEXT,
+  `transaction_id` varchar(255) NOT NULL,
+  `timestamp` DATETIME NOT NULL,
+  `donor_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  unique (`transaction_id`),
+  foreign key(`donor_id`) references donors(`id`)
+);

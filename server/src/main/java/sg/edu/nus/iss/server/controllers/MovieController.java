@@ -40,6 +40,7 @@ public class MovieController {
     @Autowired
     private ViewHistoryService viewHistoryService;
 
+    // GET /api/movies
     @GetMapping(path="/movies", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getAllMovies(@RequestParam(required = false, defaultValue= "10") String limit, @RequestParam(required = false, defaultValue = "0") String offset) {
@@ -55,6 +56,7 @@ public class MovieController {
 							.body(jsonArrayBuilder.build().toString());
     }
 
+    // GET /api/movie/:id
     @GetMapping(path="/movie/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getMovieById(@PathVariable Integer id) {
@@ -65,7 +67,8 @@ public class MovieController {
 
     }
 
-    @PutMapping(path="/save-view-history", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
+    // PUT /api/view-history
+    @PutMapping(path="/view-history", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> saveViewHistory(@RequestBody String jsonString) {
         try (InputStream is = new ByteArrayInputStream(jsonString.getBytes())) {
@@ -92,7 +95,8 @@ public class MovieController {
 		}
     }
 
-    @GetMapping(path="/get-view-history", produces=MediaType.APPLICATION_JSON_VALUE)
+    // PUT /api/view-history?email=fred@gmail.com&movieId=1
+    @GetMapping(path="/view-history", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getViewHistory(@RequestParam(required = true) String email, @RequestParam(required = true) Integer movieId) {
         String result = viewHistoryService.getElapsedTimeByEmailAndMovieId(email, movieId);

@@ -23,5 +23,4 @@ public class LocationService {
      public List<Country> getAllCountries() throws DataAccessException {
         return locationRepository.getAllCountries();
      }
-
 }

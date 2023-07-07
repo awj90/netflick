@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,10 +20,12 @@ import sg.edu.nus.iss.server.services.LocationService;
 
 @RestController
 @RequestMapping(path="/api")
+@CrossOrigin(origins="*")
 public class LocationController {
     @Autowired
     private LocationService locationService;
 
+    // GET /api/countries
     @GetMapping(path="/countries", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getAllCountries() {
         List<Country> countries = locationService.getAllCountries();
@@ -35,7 +38,8 @@ public class LocationController {
 							.body(jsonArrayBuilder.build().toString());
     }
 
-     @GetMapping(path="/states", produces=MediaType.APPLICATION_JSON_VALUE)
+    // GET /api/states?countryCode=SG
+    @GetMapping(path="/states", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getStatesByCountryCode(@RequestParam(required=true) String countryCode) {
         List<State> states = locationService.getStatesByCountryCode(countryCode);
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();

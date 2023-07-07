@@ -14,15 +14,22 @@
   width: 100%;
 }
 
-.full-width {
+.full-width-compact {
   width: 100%;
+  margin-bottom: -1.25em;
 }
 
 .form-area {
   position: relative;
   margin-bottom: 40px;
-  padding: 40px 30px 20px;
+  padding: 25px 30px 20px;
   border: 2px solid #ccc;
+}
+
+.donation-area {
+  position: relative;
+  margin-bottom: 40px;
+  padding: 25px 30px 20px;
 }
 
 .form-area h2 {
@@ -38,7 +45,10 @@
   transform: translate(-50%, -50%);
 }
 
-.button-row {
-  display: table-cell;
-  max-width: 600px;
+.form-hint {
+  color: white;
+}
+
+.align-right {
+  text-align: right;
 }

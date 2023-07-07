@@ -27,14 +27,17 @@ export class MovieService {
 
   saveViewHistory(viewHistory: ViewHistory) {
     return this.http.put<ViewHistory>(
-      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/save-view-history`,
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/view-history`,
       viewHistory
     );
   }
 
-  getViewHistory(email: string, movieId: number): Observable<{elapsed_time: string}> {
-    return this.http.get<{elapsed_time: string}>(
-      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/get-view-history`,
+  getViewHistory(
+    email: string,
+    movieId: number
+  ): Observable<{ elapsed_time: string }> {
+    return this.http.get<{ elapsed_time: string }>(
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/view-history`,
       {
         params: new HttpParams().set('email', email).set('movieId', movieId),
       }

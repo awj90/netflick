@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { YouTubePlayerModule } from '@angular/youtube-player';
@@ -22,6 +22,7 @@ import { OktaAuth } from '@okta/okta-auth-js';
 import { MovieService } from './services/movie.service';
 import { HandGestureService } from './services/hand-gesture.service';
 import { LocationService } from './services/location.service';
+import { PaymentService } from './services/payment.service';
 
 import appConfig from './configs/app-config';
 
@@ -31,6 +32,7 @@ import {
   ErrorStateMatcher,
   ShowOnDirtyErrorStateMatcher,
 } from '@angular/material/core';
+import { NgrokInterceptorService } from './services/ngrok-interceptor.service';
 
 const oktaConfig = appConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
@@ -61,6 +63,12 @@ const moduleConfig: OktaConfig = { oktaAuth };
     MovieService,
     HandGestureService,
     LocationService,
+    PaymentService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NgrokInterceptorService,
+      multi: true,
+    },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', floatLabel: 'auto' },
