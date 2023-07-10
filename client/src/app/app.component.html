@@ -25,6 +25,9 @@
   <!-- nav-bar end -->
   <router-outlet></router-outlet>
   <div class="video-container">
+    <button class="btn btn-dark align-right" (click)="toggleVideoVisibility()">
+      {{ hideCanvas ? "🔻" : "🔺" }}
+    </button>
     <video
       style="display: none"
       #video
@@ -33,6 +36,6 @@
       autoplay
       [srcObject]="stream"
     ></video>
-    <canvas #canvas width="640" height="480"></canvas>
+    <canvas #canvas width="640" height="480" [hidden]="hideCanvas"></canvas>
   </div>
 </div>

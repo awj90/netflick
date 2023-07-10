@@ -18,10 +18,10 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
 
   navbg: any;
+  hideCanvas: boolean = false; // Show canvas initially
 
   constructor(
     private handGestureService: HandGestureService,
-    private _router: Router
   ) {}
 
   @HostListener('document:scroll') scrollover() {
@@ -43,5 +43,9 @@ export class AppComponent implements AfterViewInit {
       this.canvas.nativeElement,
       this.video.nativeElement
     );
+  }
+
+  toggleVideoVisibility(): void {
+    this.hideCanvas = !this.hideCanvas;
   }
 }

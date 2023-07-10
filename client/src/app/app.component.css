@@ -29,3 +29,7 @@
   align-items: center;
   height: 100vh;
 }
+
+.align-right {
+  float: right;
+}

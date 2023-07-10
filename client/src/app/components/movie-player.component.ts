@@ -61,11 +61,11 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
-        filter((value) => value === 'peace' || value === 'ok')
+        filter((value) => value === 'two' || value === 'ok')
       )
       .subscribe((value) => {
         clearInterval(this.intervalId);
-        if (value === 'peace') {
+        if (value === 'two') {
           const playerState: number = this.player.getPlayerState();
           if (playerState === 2) {
             // player was paused, unpause it

@@ -32,10 +32,10 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
-        filter((value) => value === 'peace' || value === 'ok')
+        filter((value) => value === 'two' || value === 'ok')
       )
       .subscribe((value) => {
-        if (value === 'peace') {
+        if (value === 'two') {
           this.router.navigate(['/movies']);
         }
         if (value === 'ok') {

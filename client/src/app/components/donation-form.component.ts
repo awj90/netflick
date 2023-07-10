@@ -177,7 +177,6 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
       this.form.get(['userDetails', 'email'])?.setValue(user.email);
       this.form.get(['userDetails', 'firstName'])?.setValue(user.firstName);
       this.form.get(['userDetails', 'lastName'])?.setValue(user.lastName);
-      this.form.get('userDetails')?.disable();
     }
   }
 

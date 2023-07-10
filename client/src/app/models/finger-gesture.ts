@@ -1,80 +1,65 @@
 import * as fingerpose from 'fingerpose';
 
-const oneFingerGesture = new fingerpose.GestureDescription('one_finger');
-oneFingerGesture.addCurl(
-  fingerpose.Finger.Index,
-  fingerpose.FingerCurl.NoCurl,
-  1.0
-);
-oneFingerGesture.addCurl(
+// HAND GESTURE FOR ZERO ✊
+const zeroGesture = new fingerpose.GestureDescription('zero');
+// all fingers must be curled
+zeroGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.FullCurl);
+zeroGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.FullCurl);
+zeroGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.FullCurl);
+zeroGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
+// thumb half or full curled
+zeroGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
+zeroGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.FullCurl);
+
+// HAND GESTURE FOR ONE ☝️
+const oneGesture = new fingerpose.GestureDescription('one');
+oneGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.NoCurl);
+oneGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.FullCurl);
+oneGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.FullCurl);
+oneGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
+// thumb half or full curled
+oneGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
+oneGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.FullCurl);
+
+// HAND GESTURE FOR TWO ✌️
+const twoGesture = new fingerpose.GestureDescription('two');
+// index and middle finger: stretched out
+twoGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.NoCurl);
+twoGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.NoCurl);
+// ring: curled
+twoGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.FullCurl);
+// pinky: curled
+twoGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
+// thumb half or full curled
+twoGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
+twoGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.FullCurl);
+
+// HAND GESTURE FOR THREE
+const threeGesture = new fingerpose.GestureDescription('three');
+threeGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.NoCurl);
+threeGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.NoCurl);
+threeGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.NoCurl);
+threeGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
+threeGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
+threeGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.FullCurl);
+
+// HAND GESTURE FOR BACK
+const backGesture = new fingerpose.GestureDescription('back');
+backGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.NoCurl);
+backGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.FullCurl);
+backGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.FullCurl);
+backGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
+backGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.NoCurl);
+backGesture.addDirection(
   fingerpose.Finger.Thumb,
-  fingerpose.FingerCurl.FullCurl,
-  1.0
+  fingerpose.FingerDirection.VerticalUp
 );
-oneFingerGesture.addCurl(
-  fingerpose.Finger.Middle,
-  fingerpose.FingerCurl.FullCurl,
-  1.0
-);
-oneFingerGesture.addCurl(
-  fingerpose.Finger.Ring,
-  fingerpose.FingerCurl.FullCurl,
-  1.0
-);
-oneFingerGesture.addCurl(
-  fingerpose.Finger.Pinky,
-  fingerpose.FingerCurl.FullCurl,
-  1.0
-);
-
-// const thumbsDownGesture = new fingerpose.GestureDescription('thumbs_down');
-// thumbsDownGesture.addCurl(
-//   fingerpose.Finger.Thumb,
-//   fingerpose.FingerCurl.NoCurl
-// );
-// thumbsDownGesture.addDirection(
-//   fingerpose.Finger.Thumb,
-//   fingerpose.FingerDirection.VerticalDown,
-//   1.0
-// );
-// thumbsDownGesture.addDirection(
-//   fingerpose.Finger.Thumb,
-//   fingerpose.FingerDirection.DiagonalDownLeft,
-//   0.9
-// );
-// thumbsDownGesture.addDirection(
-//   fingerpose.Finger.Thumb,
-//   fingerpose.FingerDirection.DiagonalDownRight,
-//   0.9
-// );
-// // do this for all other fingers
-// for (let finger of [
-//   fingerpose.Finger.Index,
-//   fingerpose.Finger.Middle,
-//   fingerpose.Finger.Ring,
-//   fingerpose.Finger.Pinky,
-// ]) {
-//   thumbsDownGesture.addCurl(finger, fingerpose.FingerCurl.FullCurl, 1.0);
-//   thumbsDownGesture.addCurl(finger, fingerpose.FingerCurl.HalfCurl, 0.9);
-// }
-
-// // create new gesture with id "rock"
-// const rockGesture = new fingerpose.GestureDescription('rock');
-
-// // all fingers must be curled
-// rockGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.FullCurl);
-// rockGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.FullCurl);
-// rockGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.FullCurl);
-// rockGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
-
-// // thumb can be either stretched out or half curled
-// rockGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
-// rockGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.NoCurl);
 
 export const GE = new fingerpose.GestureEstimator([
-  fingerpose.Gestures.VictoryGesture,
   fingerpose.Gestures.ThumbsUpGesture,
-  oneFingerGesture,
-  // thumbsDownGesture,
-  // rockGesture,
+  zeroGesture,
+  oneGesture,
+  twoGesture,
+  threeGesture,
+  backGesture,
 ]);

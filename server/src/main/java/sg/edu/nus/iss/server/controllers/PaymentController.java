@@ -26,7 +26,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     // POST /api/donate/payment-intent
-    @PostMapping(path="/donate/payment-intent", produces=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="/donate/payment-intent", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createPaymentIntent(@RequestBody Payment payment) throws StripeException {
         PaymentIntent paymentIntent = paymentService.createPaymentIntent(payment);
 
@@ -34,7 +34,7 @@ public class PaymentController {
     }
 
     // POST/api/donate
-    @PostMapping(path="/donate", produces=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="/donate", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveDonation(@RequestBody String jsonString) {
 
          try {

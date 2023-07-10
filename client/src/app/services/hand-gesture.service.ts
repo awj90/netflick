@@ -8,14 +8,15 @@ import { drawKeypoints } from '../utils/hand-renderer';
 import { GE } from '../models/finger-gesture';
 
 const GestureMap = {
-  // rock: 'zero',
-  one_finger: 'one',
-  victory: 'peace',
   thumbs_up: 'ok',
-  // thumbs_down: 'back',
+  zero: 'zero',
+  one: 'one',
+  two: 'two',
+  three: 'three',
+  back: 'back',
 };
 
-type Gesture = 'peace' | 'ok' | 'one' | 'none';
+type Gesture = 'ok' | 'zero' | 'one' | 'two' | 'three' | 'back' | 'none';
 type Direction = 'left' | 'right' | 'none';
 type Size = [number, number];
 type Point = [number, number];
@@ -91,16 +92,18 @@ export class HandGestureService {
   }
 
   private _processGesture(landmarks: any): void {
-    const { gestures } = GE.estimate(landmarks, 7.5) || [];
+    const { gestures } = GE.estimate(landmarks, 10) || [];
     let gesture = null;
-    for (const g of gestures) {
-      if (g.name === 'victory' || g.name === 'thumbs_up') {
-        gesture = g.name;
-        break;
-      }
-    }
-    if (!gesture && gestures.length) {
-      gesture = 'one_finger';
+    if (gestures.length > 0) {
+      gestures.sort((g1: any, g2: any) =>
+        g1.confidence < g2.confidence
+          ? 1
+          : g1.confidence > g2.confidence
+          ? -1
+          : 0
+      );
+      gesture = gestures[0].name;
+      console.info(gesture);
     }
     if (this._lastGesture !== gesture) {
       this._lastGesture = gesture;

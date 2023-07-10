@@ -33,6 +33,7 @@ import {
   ShowOnDirtyErrorStateMatcher,
 } from '@angular/material/core';
 import { NgrokInterceptorService } from './services/ngrok-interceptor.service';
+import { MovieCategoriesComponent } from './components/movie-categories.component';
 
 const oktaConfig = appConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
@@ -47,6 +48,7 @@ const moduleConfig: OktaConfig = { oktaAuth };
     LoginComponent,
     AuthStatusComponent,
     DonationFormComponent,
+    MovieCategoriesComponent,
   ],
   imports: [
     BrowserModule,

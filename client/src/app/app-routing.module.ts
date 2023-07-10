@@ -8,8 +8,10 @@ import { MovieDetailsComponent } from './components/movie-details.component';
 import { MoviePlayerComponent } from './components/movie-player.component';
 import { LoginComponent } from './components/login.component';
 import { DonationFormComponent } from './components/donation-form.component';
+import { MovieCategoriesComponent } from './components/movie-categories.component';
 
 const appRoutes: Routes = [
+  { path: 'movie-categories', component: MovieCategoriesComponent },
   {
     path: 'donate',
     component: DonationFormComponent,

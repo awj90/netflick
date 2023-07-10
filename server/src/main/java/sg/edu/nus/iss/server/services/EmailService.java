@@ -33,7 +33,7 @@ public class EmailService {
     }
 
     private String generateEmailBody(Donor donor, Donation donation) {
-        return "Dear %s,\n\nYour donation has been received :)\nTransaction id: %s\nAmount: $%s\nTime of record: %s\nApp wishlist: %s\n\nThank you and have a great day!".formatted(donor.getFirstName(), donation.getTransactionId(), donation.getAmount(), new Date(donation.getTimestamp()).toString(), donation.getWishlist());
+        return "Dear %s,\n\nYour donation has been received :)\n\nTransaction id: %s\nAmount: $%s\nTime of record: %s\nApp wishlist: %s\n\nThank you and have a great day!".formatted(donor.getFirstName(), donation.getTransactionId(), donation.getAmount(), new Date(donation.getTimestamp()).toString(), donation.getWishlist());
     }
 
     private String generateEmailSubject(Donation donation) {
