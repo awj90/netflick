@@ -2,11 +2,13 @@ package sg.edu.nus.iss.server.repositories;
 
 public class DBQueries {
     
+    // genres table
+    public static final String SQL_SELECT_ALL_GENRES = "select * from genres";
+
     // movies table
-    public static final String SQL_SELECT_ALL_MOVIES = "select movies.id, movies.title, movies.description, movies.video_id, languages.language_name, movies.video_duration, movies.genre from movies join languages on movies.language_id = languages.id limit ? offset ?";
+    public static final String SQL_SELECT_MOVIES_BY_GENRE = "select movies.id, movies.title, movies.description, movies.video_id, languages.language_name, movies.video_duration, movies.genre from movies join languages on movies.language_id = languages.id where movies.genre like ?";
     public static final String SQL_SELECT_MOVIE_BY_ID = "select movies.id, movies.title, movies.description, movies.video_id, languages.language_name, movies.video_duration, movies.genre from movies join languages on movies.language_id = languages.id where movies.id = ?";
 
- 
     // countries and states table
     public static final String SQL_SELECT_ALL_COUNTRIES = "select * from countries";
     public static final String SQL_SELECT_STATES_BY_COUNTRY_CODE = "select * from states inner join countries on states.country_id = countries.id where countries.code = ?";

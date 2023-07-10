@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Movie } from '../models/movie';
 import { environment } from 'src/environments/environment.development';
 import { ViewHistory } from '../models/view-history';
+import { Genre } from '../models/genre';
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +14,16 @@ export class MovieService {
 
   constructor(private http: HttpClient) {}
 
-  getMovies(): Observable<Movie[]> {
+  getGenres(): Observable<Genre[]> {
+    return this.http.get<Genre[]>(
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movie-genres`
+    );
+  }
+
+  getMoviesByGenre(genre: string): Observable<Movie[]> {
+    console.info('loading');
     return this.http.get<Movie[]>(
-      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movies`
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movies/${genre}`
     );
   }
 

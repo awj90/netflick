@@ -13,7 +13,7 @@ CREATE TABLE `genres` (
 
 insert into genres
 values 
-(1, 'Action'), (2, 'Adventure'), (3, 'Comedy'), (4, 'Drama'), (5, 'Family'), (6, 'Horror'), (7, 'Romance'), (8, 'Sci-Fi'), (9, 'Thriller'), (10, 'War');
+(1, 'action'), (2, 'adventure'), (3, 'comedy'), (4, 'drama'), (5, 'family'), (6, 'horror'), (7, 'romance'), (8, 'sci-fi'), (9, 'thriller');
 
 -- languages
 DROP TABLE IF EXISTS `languages`;

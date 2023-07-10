@@ -3,7 +3,7 @@ import { MovieService } from '../services/movie.service';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { filter, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Movie } from '../models/movie';
 
 @Component({
@@ -21,12 +21,18 @@ export class MoviesComponent implements OnInit, OnDestroy {
   constructor(
     private handGestureService: HandGestureService,
     private movieService: MovieService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.getMovies();
     this.handGestureService.resetLast();
+
+    const newGenre: string = this.activatedRoute.snapshot.params['genre'];
+    const previousGenre = this.storage.getItem('selectedGenreName');
+
+    this.getMovies(previousGenre, newGenre);
+
     this.swipeSubscription$ = this.handGestureService.swipe$
       .pipe(
         tap((value) => console.info('Swiped: ', value)),
@@ -38,11 +44,14 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
-        filter((value) => value === 'ok')
+        filter((value) => value === 'ok' || value === 'back')
       )
       .subscribe((value) => {
         if (value === 'ok') {
           this.navigateToMovieDetails(this.carouselIndex);
+        }
+        if (value === 'back') {
+          this.navigateToMovieGenres(this.carouselIndex);
         }
       });
   }
@@ -55,35 +64,43 @@ export class MoviesComponent implements OnInit, OnDestroy {
 
   moveCarousel(direction: string) {
     if (direction === 'right') {
+      this.carouselIndex++;
       if (this.carouselIndex >= this.movies.length) {
         this.carouselIndex = 0;
       }
-      this.carouselIndex++;
     } else {
-      if (this.carouselIndex <= 0) {
+      this.carouselIndex--;
+      if (this.carouselIndex < 0) {
         this.carouselIndex = this.movies.length - 1;
       }
-      this.carouselIndex--;
     }
   }
 
+  navigateToMovieGenres(index: number) {
+    this.storage.setItem('selectedMovieCarouselIndex', index.toString()); // use session storage to persist carousel position
+    this.router.navigate(['movie-genres']);
+  }
+
   navigateToMovieDetails(index: number) {
-    this.storage.setItem('selectedMovieCarouselIndex', index.toString()); // use session storage to persist carousel position if user wishes to select another movie
+    this.storage.setItem('selectedMovieCarouselIndex', index.toString()); // use session storage to persist carousel position
     this.router.navigate(['movie', this.movies[index].id]);
   }
 
-  getMovies() {
-    const value = this.storage.getItem('movies');
-    if (value === null) {
-      this.movieService.getMovies().subscribe((results) => {
+  getMovies(previousGenre: string | null, newGenre: string) {
+    if (previousGenre === null || previousGenre !== newGenre) {
+      this.storage.setItem('selectedGenreName', newGenre);
+      this.movieService.getMoviesByGenre(newGenre).subscribe((results) => {
         this.movies = results;
         this.storage.setItem('movies', JSON.stringify(results));
       });
     } else {
-      this.movies = JSON.parse(value);
-      const index = this.storage.getItem('selectedMovieCarouselIndex');
-      if (index !== null) {
-        this.carouselIndex = +index;
+      const value = this.storage.getItem('movies');
+      if (value !== null) {
+        this.movies = JSON.parse(value);
+        const index = this.storage.getItem('selectedMovieCarouselIndex');
+        if (index !== null) {
+          this.carouselIndex = +index;
+        }
       }
     }
   }

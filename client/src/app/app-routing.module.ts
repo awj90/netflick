@@ -11,7 +11,6 @@ import { DonationFormComponent } from './components/donation-form.component';
 import { MovieCategoriesComponent } from './components/movie-categories.component';
 
 const appRoutes: Routes = [
-  { path: 'movie-categories', component: MovieCategoriesComponent },
   {
     path: 'donate',
     component: DonationFormComponent,
@@ -26,9 +25,10 @@ const appRoutes: Routes = [
     data: { onAuthRequired: authGuard },
   },
   { path: 'movie/:id', component: MovieDetailsComponent },
-  { path: 'movies', component: MoviesComponent },
-  { path: '', redirectTo: '/movies', pathMatch: 'full' },
-  { path: '**', redirectTo: '/movies', pathMatch: 'full' },
+  { path: 'movie-genres/:genre', component: MoviesComponent },
+  { path: 'movie-genres', component: MovieCategoriesComponent },
+  { path: '', redirectTo: '/movie-genres', pathMatch: 'full' },
+  { path: '**', redirectTo: '/movie-genres', pathMatch: 'full' },
 ];
 
 @NgModule({

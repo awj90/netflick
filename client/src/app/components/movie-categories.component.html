@@ -1,89 +1,25 @@
 <div
   id="carouselExampleControls"
-  class="carousel carousel-dark slide"
-  data-bs-ride="carousel"
+  class="carousel carousel-dark slide .bg-black"
+  data-bs-interval="false"
 >
   <div class="carousel-inner">
-    <div class="carousel-item active">
+    <div
+      *ngFor="let carouselSlide of nestedGenres; let i = index"
+      [ngClass]="i === carouselIndex ? 'carousel-item active' : 'carousel-item'"
+    >
       <div class="cards-wrapper">
-        <div class="card">
+        <div class="card" *ngFor="let genre of carouselSlide">
           <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Action.png"
-              alt="Action"
-            />
-          </div>
-        </div>
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Adventure.png"
-              alt="Adventure"
-            />
-          </div>
-        </div>
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Comedy.png"
-              alt="Comedy"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-item">
-      <div class="cards-wrapper">
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Drama.png"
-              alt="Drama"
-            />
-          </div>
-        </div>
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Family.png"
-              alt="Family"
-            />
-          </div>
-        </div>
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Horror.png"
-              alt="Horror"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-item">
-      <div class="cards-wrapper">
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Romance.png"
-              alt="Romance"
-            />
-          </div>
-        </div>
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Sci-Fi.png"
-              alt="Sci-Fi"
-            />
-          </div>
-        </div>
-        <div class="card">
-          <div class="image-wrapper">
-            <img
-              src="https://netflick.sgp1.cdn.digitaloceanspaces.com/Thriller.png"
-              alt="Thriller"
-            />
+            <a (click)="navigateToMoviesInSelectedGenre(genre)">
+              <img
+                src="https://netflick.sgp1.cdn.digitaloceanspaces.com/{{
+                  genre.genre_name
+                }}.png"
+                alt="{{ genre.genre_name }}"
+                style="cursor: pointer"
+              />
+            </a>
           </div>
         </div>
       </div>
@@ -92,8 +28,7 @@
   <button
     class="carousel-control-prev"
     type="button"
-    data-bs-target="#carouselExampleControls"
-    data-bs-slide="prev"
+    (click)="moveCarousel('left')"
   >
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
@@ -101,8 +36,7 @@
   <button
     class="carousel-control-next"
     type="button"
-    data-bs-target="#carouselExampleControls"
-    data-bs-slide="next"
+    (click)="moveCarousel('right')"
   >
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>

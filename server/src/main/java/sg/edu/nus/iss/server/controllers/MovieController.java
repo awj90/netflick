@@ -24,6 +24,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import sg.edu.nus.iss.server.models.Genre;
 import sg.edu.nus.iss.server.models.Movie;
 import sg.edu.nus.iss.server.models.ViewHistory;
 import sg.edu.nus.iss.server.services.MovieService;
@@ -40,11 +41,27 @@ public class MovieController {
     @Autowired
     private ViewHistoryService viewHistoryService;
 
-    // GET /api/movies
-    @GetMapping(path="/movies", produces=MediaType.APPLICATION_JSON_VALUE)
+    // GET /api/movie-genres
+    @GetMapping(path="/movie-genres", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getAllMovies(@RequestParam(required = false, defaultValue= "10") String limit, @RequestParam(required = false, defaultValue = "0") String offset) {
-        List<Movie> movies = this.movieService.getAllMovies(Integer.parseInt(limit), Integer.parseInt(offset));
+    public ResponseEntity<String> getAllGenres() {
+        List<Genre> genres = movieService.getAllGenres();
+		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+		for (Genre genre: genres) {
+            if (genre != null) {
+                jsonArrayBuilder.add(genre.toJson());
+            }
+		}
+		return ResponseEntity.status(HttpStatus.OK)
+							.contentType(MediaType.APPLICATION_JSON)
+							.body(jsonArrayBuilder.build().toString());
+    }
+
+    // GET /api/movies/:genre
+    @GetMapping(path="/movies/{genre}", produces=MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> getMoviesByGenre(@PathVariable(required=true) String genre) {
+        List<Movie> movies = movieService.getMoviesByGenre(genre);
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
 		for (Movie movie: movies) {
             if (movie != null) {
@@ -60,7 +77,7 @@ public class MovieController {
     @GetMapping(path="/movie/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getMovieById(@PathVariable Integer id) {
-        Optional<Movie> opt = this.movieService.getMovieById(id);
+        Optional<Movie> opt = movieService.getMovieById(id);
         return ResponseEntity.status(HttpStatus.OK)
 							.contentType(MediaType.APPLICATION_JSON)
 							.body(opt.get().toJson().build().toString());
