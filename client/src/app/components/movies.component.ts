@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MovieService } from '../services/movie.service';
 import { HandGestureService } from '../services/hand-gesture.service';
-import { filter, tap } from 'rxjs/operators';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Movie } from '../models/movie';
@@ -44,7 +44,8 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
-        filter((value) => value === 'ok' || value === 'back')
+        filter((value) => value === 'ok' || value === 'back'),
+        debounceTime(500)
       )
       .subscribe((value) => {
         if (value === 'ok') {

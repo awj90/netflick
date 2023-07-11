@@ -15,6 +15,7 @@ import { MoviePlayerComponent } from './components/movie-player.component';
 import { LoginComponent } from './components/login.component';
 import { AuthStatusComponent } from './components/auth-status.component';
 import { DonationFormComponent } from './components/donation-form.component';
+import { MovieCategoriesComponent } from './components/movie-categories.component';
 
 import { OktaAuthModule, OktaConfig } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
@@ -33,7 +34,7 @@ import {
   ShowOnDirtyErrorStateMatcher,
 } from '@angular/material/core';
 import { NgrokInterceptorService } from './services/ngrok-interceptor.service';
-import { MovieCategoriesComponent } from './components/movie-categories.component';
+import { AuthInterceptorService } from './services/auth-interceptor.service';
 
 const oktaConfig = appConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
@@ -66,6 +67,11 @@ const moduleConfig: OktaConfig = { oktaAuth };
     HandGestureService,
     LocationService,
     PaymentService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgrokInterceptorService,

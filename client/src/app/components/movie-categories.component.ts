@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Genre } from '../models/genre';
-import { Subscription, filter, tap } from 'rxjs';
+import { Subscription, debounceTime, filter, tap } from 'rxjs';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { MovieService } from '../services/movie.service';
 import { Router } from '@angular/router';
@@ -24,8 +24,8 @@ export class MovieCategoriesComponent {
   ) {}
 
   ngOnInit() {
-    this.getGenres();
     this.handGestureService.resetLast();
+    this.getGenres();
     this.swipeSubscription$ = this.handGestureService.swipe$
       .pipe(
         tap((value) => console.info('Swiped: ', value)),
@@ -39,7 +39,8 @@ export class MovieCategoriesComponent {
         tap((value) => console.info('Gestured: ', value)),
         filter(
           (value) => value === 'one' || value === 'two' || value === 'three'
-        )
+        ),
+        debounceTime(500)
       )
       .subscribe((value) => {
         if (value === 'one') {
@@ -83,7 +84,7 @@ export class MovieCategoriesComponent {
   navigateToMoviesInSelectedGenre(genre: Genre) {
     this.storage.setItem(
       'selectedGenreCarouselIndex',
-      (genre.id % 3).toString()
+      this.carouselIndex.toString()
     ); // use session storage to persist carousel position if user wishes to select another genre
     this.router.navigate(['movie-genres', genre.genre_name]);
   }

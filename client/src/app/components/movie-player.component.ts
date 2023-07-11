@@ -1,7 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovieService } from '../services/movie.service';
-import { Subscription, filter, firstValueFrom, map, tap } from 'rxjs';
+import {
+  Subscription,
+  debounceTime,
+  filter,
+  firstValueFrom,
+  map,
+  tap,
+} from 'rxjs';
 import { Movie } from '../models/movie';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { ViewHistory } from '../models/view-history';
@@ -61,11 +68,12 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
-        filter((value) => value === 'two' || value === 'ok')
+        filter((value) => value === 'zero' || value === 'back'),
+        debounceTime(500)
       )
       .subscribe((value) => {
         clearInterval(this.intervalId);
-        if (value === 'two') {
+        if (value === 'zero') {
           const playerState: number = this.player.getPlayerState();
           if (playerState === 2) {
             // player was paused, unpause it
@@ -75,7 +83,7 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
             this.player.pauseVideo();
           }
         }
-        if (value === 'ok') {
+        if (value === 'back') {
           this.player.stopVideo();
           this.router.navigate(['../'], { relativeTo: this.activatedRoute });
         }
@@ -136,8 +144,6 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
         fs: 1,
         modestbranding: 1,
         playsinline: 0,
-        enablejsapi: 1,
-        origin: 'http://localhost:4200',
       },
       events: {
         onReady: this.onPlayerReady.bind(this), // configure YouTube iframe player API to call onPlayerReady() when the video player is ready

@@ -57,8 +57,8 @@ public class MovieController {
 							.body(jsonArrayBuilder.build().toString());
     }
 
-    // GET /api/movies/:genre
-    @GetMapping(path="/movies/{genre}", produces=MediaType.APPLICATION_JSON_VALUE)
+    // GET /api/movie-genres/:genre
+    @GetMapping(path="/movie-genres/{genre}", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getMoviesByGenre(@PathVariable(required=true) String genre) {
         List<Movie> movies = movieService.getMoviesByGenre(genre);

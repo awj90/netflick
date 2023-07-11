@@ -23,7 +23,7 @@ export class MovieService {
   getMoviesByGenre(genre: string): Observable<Movie[]> {
     console.info('loading');
     return this.http.get<Movie[]>(
-      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movies/${genre}`
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movie-genres/${genre}`
     );
   }
 

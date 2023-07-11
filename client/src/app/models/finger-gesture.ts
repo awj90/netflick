@@ -1,5 +1,22 @@
 import * as fingerpose from 'fingerpose';
 
+// HAND GESTURE FOR THUMBS UP 👍
+const thumbsUpGesture = new fingerpose.GestureDescription('ok');
+thumbsUpGesture.addCurl(
+  fingerpose.Finger.Index,
+  fingerpose.FingerCurl.FullCurl
+);
+thumbsUpGesture.addCurl(
+  fingerpose.Finger.Middle,
+  fingerpose.FingerCurl.FullCurl
+);
+thumbsUpGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.FullCurl);
+thumbsUpGesture.addCurl(
+  fingerpose.Finger.Pinky,
+  fingerpose.FingerCurl.FullCurl
+);
+thumbsUpGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.NoCurl);
+
 // HAND GESTURE FOR ZERO ✊
 const zeroGesture = new fingerpose.GestureDescription('zero');
 // all fingers must be curled
@@ -56,7 +73,7 @@ backGesture.addDirection(
 );
 
 export const GE = new fingerpose.GestureEstimator([
-  fingerpose.Gestures.ThumbsUpGesture,
+  thumbsUpGesture,
   zeroGesture,
   oneGesture,
   twoGesture,

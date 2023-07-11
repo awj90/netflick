@@ -3,7 +3,7 @@ import { MovieService } from '../services/movie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { Subscription, firstValueFrom } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { Movie } from '../models/movie';
 
 @Component({
@@ -21,6 +21,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
   selectSubscription$!: Subscription;
   movie$!: Promise<Movie>;
+  storage: Storage = sessionStorage;
 
   ngOnInit(): void {
     // get movie id from route and get movie by movie id
@@ -32,11 +33,12 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
-        filter((value) => value === 'two' || value === 'ok')
+        filter((value) => value === 'back' || value === 'ok'),
+        debounceTime(500)
       )
       .subscribe((value) => {
-        if (value === 'two') {
-          this.router.navigate(['/movies']);
+        if (value === 'back') {
+          this.navigateToMovieGenres();
         }
         if (value === 'ok') {
           this.router.navigate(['./player'], {
@@ -53,5 +55,14 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
   getMovieById(id: number) {
     this.movie$ = firstValueFrom(this.movieService.getMovieById(id));
+  }
+
+  navigateToMovieGenres() {
+    const value = this.storage.getItem('selectedGenreName');
+    if (value !== null) {
+      this.router.navigate(['/movie-genres', value]);
+    } else {
+      this.router.navigate(['/movie-genres']);
+    }
   }
 }

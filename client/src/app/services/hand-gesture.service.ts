@@ -8,7 +8,7 @@ import { drawKeypoints } from '../utils/hand-renderer';
 import { GE } from '../models/finger-gesture';
 
 const GestureMap = {
-  thumbs_up: 'ok',
+  ok: 'ok',
   zero: 'zero',
   one: 'one',
   two: 'two',
@@ -92,7 +92,7 @@ export class HandGestureService {
   }
 
   private _processGesture(landmarks: any): void {
-    const { gestures } = GE.estimate(landmarks, 10) || [];
+    const { gestures } = GE.estimate(landmarks, 9.9) || [];
     let gesture = null;
     if (gestures.length > 0) {
       gestures.sort((g1: any, g2: any) =>
@@ -112,7 +112,7 @@ export class HandGestureService {
     } else {
       if (
         this._emitGesture &&
-        this._toSeconds(Date.now() - this._lastGestureTimestamp) > 1
+        this._toSeconds(Date.now() - this._lastGestureTimestamp) > 0.2
       ) {
         if (this._lastGesture) {
           this._gesture$.next(GestureMap[this._lastGesture]);

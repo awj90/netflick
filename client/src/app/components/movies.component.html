@@ -1,4 +1,4 @@
-<!-- Trending Movies start -->
+<!-- Movies start -->
 <div id="carousel" class="carousel carousel-dark slide">
   <div class="carousel-inner">
     <div
@@ -15,6 +15,20 @@
       <div class="carousel-caption d-none d-md-block">
         <h1>{{ movie.title }}</h1>
         <p>{{ movie.description }}</p>
+        <button
+          type="button"
+          class="btn btn-dark btn-sm"
+          (click)="navigateToMovieGenres(i)"
+        >
+          Back</button
+        >&nbsp;
+        <button
+          type="button"
+          class="btn btn-dark btn-sm"
+          (click)="navigateToMovieDetails(i)"
+        >
+          Details
+        </button>
       </div>
     </div>
   </div>
@@ -35,4 +49,4 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<!-- Trending Movies end -->
+<!-- Movies end -->
