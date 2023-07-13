@@ -9,6 +9,7 @@ import { MoviePlayerComponent } from './components/movie-player.component';
 import { LoginComponent } from './components/login.component';
 import { DonationFormComponent } from './components/donation-form.component';
 import { MovieCategoriesComponent } from './components/movie-categories.component';
+import { LandingPageComponent } from './components/landing-page.component';
 
 const appRoutes: Routes = [
   {
@@ -27,8 +28,8 @@ const appRoutes: Routes = [
   { path: 'movie/:id', component: MovieDetailsComponent },
   { path: 'movie-genres/:genre', component: MoviesComponent },
   { path: 'movie-genres', component: MovieCategoriesComponent },
-  { path: '', redirectTo: '/movie-genres', pathMatch: 'full' },
-  { path: '**', redirectTo: '/movie-genres', pathMatch: 'full' },
+  { path: '', component: LandingPageComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({

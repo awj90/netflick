@@ -35,6 +35,7 @@ import {
 } from '@angular/material/core';
 import { NgrokInterceptorService } from './services/ngrok-interceptor.service';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { LandingPageComponent } from './components/landing-page.component';
 
 const oktaConfig = appConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
@@ -50,6 +51,7 @@ const moduleConfig: OktaConfig = { oktaAuth };
     AuthStatusComponent,
     DonationFormComponent,
     MovieCategoriesComponent,
+    LandingPageComponent,
   ],
   imports: [
     BrowserModule,
