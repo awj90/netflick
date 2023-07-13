@@ -2,9 +2,11 @@
 <header class="masthead text-center text-white">
   <div class="masthead-content">
     <div class="container px-5">
-      <h1 class="masthead-heading mb-0">Netflick</h1>
-      <h2 class="masthead-subheading mb-0">Your Hand, Our Command</h2>
-      <a class="btn btn-primary btn-xl rounded-pill mt-5" href="#scroll"
+      <h1 class="masthead-heading mb-5">Netflick</h1>
+      <h5 class="masthead-subheading mb-0">Your Hand, Our Command</h5>
+      <a
+        class="btn btn-primary btn-xl rounded-pill mt-5"
+        [routerLink]="['/movie-genres']"
         >Browse Movies</a
       >
     </div>
@@ -29,10 +31,10 @@
       </div>
       <div class="col-lg-6 order-lg-1">
         <div class="p-5">
-          <h2 class="display-4">
+          <h2 class="display-4" style="color: white">
             Immerse in seamless control with hand gestures
           </h2>
-          <p>
+          <p style="color: white">
             Experience for yourself what you have only seen in movies, while
             watching them
           </p>
@@ -56,8 +58,10 @@
       </div>
       <div class="col-lg-6">
         <div class="p-5">
-          <h2 class="display-4">Multi-task without constraints</h2>
-          <p>
+          <h2 class="display-4" style="color: white">
+            Multi-task without constraints
+          </h2>
+          <p style="color: white">
             Indulge together with your favourite food or messy hobbies without
             hassle
           </p>
@@ -81,8 +85,10 @@
       </div>
       <div class="col-lg-6 order-lg-1">
         <div class="p-5">
-          <h2 class="display-4">Unparalleled convenience</h2>
-          <p>
+          <h2 class="display-4" style="color: white">
+            Unparalleled convenience
+          </h2>
+          <p style="color: white">
             Forgot your mouse? Have elderly unfamiliar with computers? Just wave
             a hand!
           </p>
@@ -94,6 +100,7 @@
 <!-- Testimonials-->
 <section class="testimonials text-center bg-light">
   <div class="container">
+    <hr />
     <h2 class="mb-5">What people are saying...</h2>
     <div class="row">
       <div class="col-lg-4">
@@ -103,9 +110,9 @@
             src="assets/img/testimonials-1.jpg"
             alt="..."
           />
-          <h5>Margaret E.</h5>
+          <h5>Wilma F.</h5>
           <p class="font-weight-light mb-0">
-            "This is fantastic! Thanks so much guys!"
+            "This is fantastic! Thanks so much guys! "
           </p>
         </div>
       </div>
@@ -116,7 +123,7 @@
             src="assets/img/testimonials-2.jpg"
             alt="..."
           />
-          <h5>Fred S.</h5>
+          <h5>Fred F.</h5>
           <p class="font-weight-light mb-0">
             "I would totally put a hole in my pocket for this, yet it's
             completely free. Faith in humanity restored!"
@@ -130,12 +137,13 @@
             src="assets/img/testimonials-3.jpg"
             alt="..."
           />
-          <h5>Sarah W.</h5>
+          <h5>Betty R.</h5>
           <p class="font-weight-light mb-0">
             "Literally as convenient as lifting a few fingers. Love it! 🫰"
           </p>
         </div>
       </div>
     </div>
+    <hr />
   </div>
 </section>

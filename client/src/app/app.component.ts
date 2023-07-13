@@ -5,7 +5,6 @@ import {
   HostListener,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { HandGestureService } from './services/hand-gesture.service';
 
 @Component({
@@ -20,9 +19,7 @@ export class AppComponent implements AfterViewInit {
   navbg: any;
   hideCanvas: boolean = false; // Show canvas initially
 
-  constructor(
-    private handGestureService: HandGestureService,
-  ) {}
+  constructor(private handGestureService: HandGestureService) {}
 
   @HostListener('document:scroll') scrollover() {
     if (document.body.scrollTop > 0 || document.documentElement.scrollTop > 0) {

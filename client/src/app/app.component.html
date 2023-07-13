@@ -29,28 +29,6 @@
       </div>
     </div>
   </nav>
-  <!-- <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" [routerLink]="['/', 'movies']">NETFLICK</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <app-auth-status></app-auth-status> &nbsp;
-        <button class="btn btn-dark btn-sm" [routerLink]="['/donate']">
-          Donate
-        </button>
-      </div>
-    </div>
-  </nav> -->
   <!-- nav-bar end -->
   <router-outlet></router-outlet>
   <!-- Footer-->
@@ -61,6 +39,7 @@
       </p>
     </div>
   </footer>
+  <!-- Footer end -->
   <div class="video-container mt-4">
     <button class="btn btn-dark align-right" (click)="toggleVideoVisibility()">
       {{ hideCanvas ? "🔻" : "🔺" }}
