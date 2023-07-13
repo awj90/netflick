@@ -30,7 +30,13 @@
     </div>
   </nav>
   <!-- nav-bar end -->
-  <router-outlet></router-outlet>
+
+  <!-- main content start -->
+  <main [@slideInAnimation]="o.isActivated ? o.activatedRoute : ''">
+    <router-outlet #o="outlet"></router-outlet>
+  </main>
+  <!-- main content end -->
+
   <!-- Footer-->
   <footer class="py-5 bg-black">
     <div class="container px-5">
@@ -40,8 +46,11 @@
     </div>
   </footer>
   <!-- Footer end -->
-  <div class="video-container mt-4">
-    <button class="btn btn-dark align-right" (click)="toggleVideoVisibility()">
+  <div class="video-container mt-3">
+    <button
+      class="btn btn-dark align-right mt-5"
+      (click)="toggleVideoVisibility()"
+    >
       {{ hideCanvas ? "🔻" : "🔺" }}
     </button>
     <video
@@ -52,6 +61,14 @@
       autoplay
       [srcObject]="stream"
     ></video>
-    <canvas #canvas width="640" height="480" [hidden]="hideCanvas"></canvas>
+    <canvas
+      #canvas
+      width="640"
+      height="480"
+      [ngStyle]="{
+        display: hideCanvas ? 'none' : '',
+        'z-index': hideCanvas ? 0 : 9999
+      }"
+    ></canvas>
   </div>
 </div>

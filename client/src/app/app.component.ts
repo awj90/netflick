@@ -6,11 +6,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HandGestureService } from './services/hand-gesture.service';
+import { RouterOutlet } from '@angular/router';
+import { slideInAnimation } from './route-animations';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  animations: [slideInAnimation],
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
@@ -44,5 +47,13 @@ export class AppComponent implements AfterViewInit {
 
   toggleVideoVisibility(): void {
     this.hideCanvas = !this.hideCanvas;
+  }
+
+  prepareRoute(outlet: RouterOutlet) {
+    return (
+      outlet &&
+      outlet.activatedRouteData &&
+      outlet.activatedRouteData['animation']
+    );
   }
 }
