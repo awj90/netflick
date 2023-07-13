@@ -17,6 +17,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
   swipeSubscription$!: Subscription;
   selectSubscription$!: Subscription;
   storage: Storage = sessionStorage;
+  loading: boolean = true;
 
   constructor(
     private handGestureService: HandGestureService,
@@ -26,6 +27,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.loading = true;
     this.handGestureService.resetLast();
 
     const newGenre: string = this.activatedRoute.snapshot.params['genre'];
@@ -93,6 +95,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
       this.movieService.getMoviesByGenre(newGenre).subscribe((results) => {
         this.movies = results;
         this.storage.setItem('movies', JSON.stringify(results));
+        this.loading = false;
       });
     } else {
       const value = this.storage.getItem('movies');
@@ -103,6 +106,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
           this.carouselIndex = +index;
         }
       }
+      this.loading = false;
     }
   }
 }

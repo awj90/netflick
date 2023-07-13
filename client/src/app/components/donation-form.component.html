@@ -7,7 +7,7 @@
     <!-- donor details: firstName, lastName, email -->
     <div formGroupName="userDetails" class="form-area">
       <h2>Donor Details</h2>
-      <div class="row mb-5">
+      <div class="row mb-4">
         <table class="full-width-compact" cellspacing="0">
           <tr>
             <td>
@@ -265,6 +265,16 @@
         <div id="card-errors" class="error"></div>
       </div>
     </div>
+    <mat-checkbox
+      formControlName="agreeToTermsAndConditions"
+      style="color: white"
+      (click)="$event.preventDefault()"
+      >*I consent to the use of my personal data provided in this donation
+      portal for Netflick to verify my identity, register my donation and tax
+      reference number with IRAS to qualify for tax deduction (if applicable),
+      or to process any other administrative matters related to donation
+      payments or refunds.</mat-checkbox
+    >
     <div class="donation-area">
       <table class="full-width-compact">
         <tr>

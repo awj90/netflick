@@ -116,6 +116,9 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
       wishlist: new FormControl<string>('', [
         Validators.maxLength(this.WISHLIST_MAX_CHAR_LENGTH),
       ]),
+      agreeToTermsAndConditions: this.fb.control<boolean>(true, [
+        Validators.requiredTrue, // required True
+      ]),
     });
   }
 
@@ -304,4 +307,5 @@ interface FormFields {
     expirationMonth?: number;
   };
   wishlist: string;
+  agreeToTermsAndConditions: boolean;
 }

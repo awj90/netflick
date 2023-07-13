@@ -16,6 +16,7 @@ export class MovieCategoriesComponent {
   swipeSubscription$!: Subscription;
   selectSubscription$!: Subscription;
   storage: Storage = sessionStorage;
+  loading: boolean = true;
 
   constructor(
     private handGestureService: HandGestureService,
@@ -24,6 +25,7 @@ export class MovieCategoriesComponent {
   ) {}
 
   ngOnInit() {
+    this.loading = true;
     this.handGestureService.resetLast();
     this.getGenres();
     this.swipeSubscription$ = this.handGestureService.swipe$
@@ -98,6 +100,7 @@ export class MovieCategoriesComponent {
           this.nestedGenres.push(results.splice(0, carouselSlideSize));
         }
         this.storage.setItem('genres', JSON.stringify(this.nestedGenres));
+        this.loading = false;
       });
     } else {
       this.nestedGenres = JSON.parse(value);
@@ -105,6 +108,7 @@ export class MovieCategoriesComponent {
       if (index !== null) {
         this.carouselIndex = +index;
       }
+      this.loading = false;
     }
   }
 }

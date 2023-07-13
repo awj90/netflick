@@ -3,7 +3,15 @@
   class="carousel carousel-dark slide .bg-black"
   data-bs-interval="false"
 >
-  <div class="carousel-inner">
+  <div *ngIf="loading" class="mt-5" style="text-align: center">
+    <div class="lds-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <div class="carousel-inner" *ngIf="!loading && nestedGenres.length > 0">
     <div
       *ngFor="let carouselSlide of nestedGenres; let i = index"
       [ngClass]="i === carouselIndex ? 'carousel-item active' : 'carousel-item'"

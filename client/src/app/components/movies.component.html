@@ -1,6 +1,14 @@
 <!-- Movies start -->
 <div id="carousel" class="carousel carousel-dark slide">
-  <div class="carousel-inner">
+  <div *ngIf="loading" class="mt-5" style="text-align: center">
+    <div class="lds-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <div class="carousel-inner" *ngIf="!loading && movies.length > 0">
     <div
       *ngFor="let movie of movies; let i = index"
       [ngClass]="i === carouselIndex ? 'carousel-item active' : 'carousel-item'"
