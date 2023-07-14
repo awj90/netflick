@@ -9,13 +9,14 @@ import { CommonModule } from '@angular/common';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
 import { AppComponent } from './app.component';
+import { LandingPageComponent } from './components/landing-page.component';
+import { MovieCategoriesComponent } from './components/movie-categories.component';
 import { MoviesComponent } from './components/movies.component';
 import { MovieDetailsComponent } from './components/movie-details.component';
 import { MoviePlayerComponent } from './components/movie-player.component';
 import { LoginComponent } from './components/login.component';
 import { AuthStatusComponent } from './components/auth-status.component';
 import { DonationFormComponent } from './components/donation-form.component';
-import { MovieCategoriesComponent } from './components/movie-categories.component';
 
 import { OktaAuthModule, OktaConfig } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
@@ -33,9 +34,9 @@ import {
   ErrorStateMatcher,
   ShowOnDirtyErrorStateMatcher,
 } from '@angular/material/core';
+
 import { NgrokInterceptorService } from './services/ngrok-interceptor.service';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
-import { LandingPageComponent } from './components/landing-page.component';
 
 const oktaConfig = appConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
@@ -44,14 +45,14 @@ const moduleConfig: OktaConfig = { oktaAuth };
 @NgModule({
   declarations: [
     AppComponent,
+    LandingPageComponent,
+    MovieCategoriesComponent,
     MoviesComponent,
     MovieDetailsComponent,
     MoviePlayerComponent,
     LoginComponent,
     AuthStatusComponent,
     DonationFormComponent,
-    MovieCategoriesComponent,
-    LandingPageComponent,
   ],
   imports: [
     BrowserModule,

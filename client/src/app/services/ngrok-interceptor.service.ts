@@ -23,6 +23,7 @@ export class NgrokInterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Promise<HttpEvent<any>> {
     // clone another request that includes the access token as the original request is immutable
+    // only for testing tunnel using ngrok
     // req = req.clone({
     //   headers: req.headers.set('ngrok-skip-browser-warning', `_`),
     // });
