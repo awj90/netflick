@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import com.stripe.Stripe;
@@ -89,7 +90,7 @@ public class PaymentService {
             donation.setTimestamp(new Date().getTime());
             this.donationRepository.insertDonation(donation);
             return this.emailService.sendDonationReceipt(donor, donation);
-        } catch (IOException | DataAccessException ex) {
+        } catch (IOException | DataAccessException | MailException ex) {
             throw new Exception(ex.getMessage());
         }
     }

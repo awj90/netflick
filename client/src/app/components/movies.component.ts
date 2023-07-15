@@ -43,8 +43,14 @@ export class MoviesComponent implements OnInit, OnDestroy {
         tap((value) => console.info('Swiped: ', value)),
         filter((value) => value === 'left' || value === 'right')
       )
-      .subscribe((direction) => {
-        this.moveCarousel(direction);
+      .subscribe({
+        next: (direction) => {
+          this.moveCarousel(direction);
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
@@ -52,13 +58,19 @@ export class MoviesComponent implements OnInit, OnDestroy {
         filter((value) => value === 'ok' || value === 'back'),
         debounceTime(500)
       )
-      .subscribe((value) => {
-        if (value === 'ok') {
-          this.navigateToMovieDetails(this.carouselIndex);
-        }
-        if (value === 'back') {
-          this.navigateToMovieGenres(this.carouselIndex);
-        }
+      .subscribe({
+        next: (value) => {
+          if (value === 'ok') {
+            this.navigateToMovieDetails(this.carouselIndex);
+          }
+          if (value === 'back') {
+            this.navigateToMovieGenres(this.carouselIndex);
+          }
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
   }
 
@@ -95,10 +107,17 @@ export class MoviesComponent implements OnInit, OnDestroy {
   getMovies(previousGenre: string | null, newGenre: string) {
     if (previousGenre === null || previousGenre !== newGenre) {
       this.storage.setItem('selectedGenreName', newGenre);
-      this.movieService.getMoviesByGenre(newGenre).subscribe((results) => {
-        this.movies = results;
-        this.storage.setItem('movies', JSON.stringify(results));
-        this.loading = false;
+      this.movieService.getMoviesByGenre(newGenre).subscribe({
+        next: (results) => {
+          this.movies = results;
+          this.storage.setItem('movies', JSON.stringify(results));
+          this.loading = false;
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+          this.loading = false;
+        },
       });
     } else {
       const value = this.storage.getItem('movies');

@@ -59,13 +59,19 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
         tap((value) => console.info('Swiped: ', value)),
         filter((value) => value === 'left' || value === 'right')
       )
-      .subscribe((direction) => {
-        clearInterval(this.intervalId);
-        if (direction === 'left') {
-          this.rewind(); // swipe left to rewind video
-        } else if (direction === 'right') {
-          this.ff(); // swipe right to fast forward video
-        }
+      .subscribe({
+        next: (direction) => {
+          clearInterval(this.intervalId);
+          if (direction === 'left') {
+            this.rewind(); // swipe left to rewind video
+          } else if (direction === 'right') {
+            this.ff(); // swipe right to fast forward video
+          }
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
@@ -73,22 +79,28 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
         filter((value) => value === 'zero' || value === 'back'),
         debounceTime(500)
       )
-      .subscribe((value) => {
-        clearInterval(this.intervalId);
-        if (value === 'zero') {
-          const playerState: number = this.player.getPlayerState();
-          if (playerState === 2) {
-            // player was paused, unpause it
-            this.player.playVideo();
-          } else {
-            // pause the player if it not currently paused
-            this.player.pauseVideo();
+      .subscribe({
+        next: (value) => {
+          clearInterval(this.intervalId);
+          if (value === 'zero') {
+            const playerState: number = this.player.getPlayerState();
+            if (playerState === 2) {
+              // player was paused, unpause it
+              this.player.playVideo();
+            } else {
+              // pause the player if it not currently paused
+              this.player.pauseVideo();
+            }
           }
-        }
-        if (value === 'back') {
-          this.player.stopVideo();
-          this.router.navigate(['../'], { relativeTo: this.activatedRoute });
-        }
+          if (value === 'back') {
+            this.player.stopVideo();
+            this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+          }
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
   }
 
@@ -129,9 +141,15 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
         }),
         map((movie) => movie.video_id)
       )
-      .subscribe((id) => {
-        this.videoId = id;
-        this.initYT();
+      .subscribe({
+        next: (id) => {
+          this.videoId = id;
+          this.initYT();
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
   }
 

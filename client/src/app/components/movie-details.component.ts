@@ -36,15 +36,21 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
         filter((value) => value === 'back' || value === 'ok'),
         debounceTime(500)
       )
-      .subscribe((value) => {
-        if (value === 'back') {
-          this.navigateToMovieGenres();
-        }
-        if (value === 'ok') {
-          this.router.navigate(['./player'], {
-            relativeTo: this.activatedRoute,
-          });
-        }
+      .subscribe({
+        next: (value) => {
+          if (value === 'back') {
+            this.navigateToMovieGenres();
+          }
+          if (value === 'ok') {
+            this.router.navigate(['./player'], {
+              relativeTo: this.activatedRoute,
+            });
+          }
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
   }
 

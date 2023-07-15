@@ -34,8 +34,14 @@ export class MovieCategoriesComponent {
         tap((value) => console.info('Swiped: ', value)),
         filter((value) => value === 'left' || value === 'right')
       )
-      .subscribe((direction) => {
-        this.moveCarousel(direction);
+      .subscribe({
+        next: (direction) => {
+          this.moveCarousel(direction);
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
@@ -49,25 +55,31 @@ export class MovieCategoriesComponent {
         ),
         debounceTime(500)
       )
-      .subscribe((value) => {
-        if (value === 'one') {
-          this.navigateToMoviesInSelectedGenre(
-            this.nestedGenres[this.carouselIndex][0]
-          );
-        }
-        if (value === 'two') {
-          this.navigateToMoviesInSelectedGenre(
-            this.nestedGenres[this.carouselIndex][1]
-          );
-        }
-        if (value === 'three') {
-          this.navigateToMoviesInSelectedGenre(
-            this.nestedGenres[this.carouselIndex][2]
-          );
-        }
-        if (value === 'back') {
-          this.router.navigate(['../'], { relativeTo: this.activatedRoute });
-        }
+      .subscribe({
+        next: (value) => {
+          if (value === 'one') {
+            this.navigateToMoviesInSelectedGenre(
+              this.nestedGenres[this.carouselIndex][0]
+            );
+          }
+          if (value === 'two') {
+            this.navigateToMoviesInSelectedGenre(
+              this.nestedGenres[this.carouselIndex][1]
+            );
+          }
+          if (value === 'three') {
+            this.navigateToMoviesInSelectedGenre(
+              this.nestedGenres[this.carouselIndex][2]
+            );
+          }
+          if (value === 'back') {
+            this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+          }
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+        },
       });
   }
 
@@ -102,13 +114,20 @@ export class MovieCategoriesComponent {
   getGenres() {
     const value = this.storage.getItem('genres');
     if (value === null) {
-      this.movieService.getGenres().subscribe((results) => {
-        let carouselSlideSize = 3;
-        while (results.length > 0) {
-          this.nestedGenres.push(results.splice(0, carouselSlideSize));
-        }
-        this.storage.setItem('genres', JSON.stringify(this.nestedGenres));
-        this.loading = false;
+      this.movieService.getGenres().subscribe({
+        next: (results) => {
+          let carouselSlideSize = 3;
+          while (results.length > 0) {
+            this.nestedGenres.push(results.splice(0, carouselSlideSize));
+          }
+          this.storage.setItem('genres', JSON.stringify(this.nestedGenres));
+          this.loading = false;
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+          this.loading = false;
+        },
       });
     } else {
       this.nestedGenres = JSON.parse(value);

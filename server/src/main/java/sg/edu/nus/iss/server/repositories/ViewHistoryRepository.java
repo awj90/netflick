@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import sg.edu.nus.iss.server.exceptions.DatabaseException;
 import sg.edu.nus.iss.server.models.ViewHistory;
 
 @Repository
@@ -14,11 +15,19 @@ public class ViewHistoryRepository {
     @Qualifier("view-history")
     private RedisTemplate<String, String> redisTemplate;
 
-    public void upsertViewHistory(ViewHistory viewHistory) {
-        redisTemplate.opsForHash().put(viewHistory.getEmail(), viewHistory.getMovieId().toString(), viewHistory.getTimeElapsed().toString());
+    public void upsertViewHistory(ViewHistory viewHistory) throws DatabaseException {
+        try {
+            redisTemplate.opsForHash().put(viewHistory.getEmail(), viewHistory.getMovieId().toString(), viewHistory.getTimeElapsed().toString());
+        } catch (Exception ex) {
+            throw new DatabaseException("Error saving progress of watched movie.\nUser: %s\nMovieId: %s".formatted(viewHistory.getEmail(), viewHistory.getMovieId()));
+        }
     }
 
-    public String getElapsedTimeByEmailAndMovieId(String email, Integer movieId) {
-        return (String) redisTemplate.opsForHash().get(email, movieId.toString());
+    public String getElapsedTimeByEmailAndMovieId(String email, Integer movieId) throws DatabaseException {
+        try {
+            return (String) redisTemplate.opsForHash().get(email, movieId.toString());
+        } catch (Exception ex) {
+            throw new DatabaseException("Error fetching progress of watched movie.\nUser: %s\nMovieId: %s".formatted(email, movieId));
+        }
     }
 }

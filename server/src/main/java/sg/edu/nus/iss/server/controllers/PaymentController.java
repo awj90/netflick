@@ -27,19 +27,28 @@ public class PaymentController {
 
     // POST /api/donate/payment-intent
     @PostMapping(path="/donate/payment-intent", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createPaymentIntent(@RequestBody Payment payment) throws StripeException {
-        PaymentIntent paymentIntent = paymentService.createPaymentIntent(payment);
-
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(paymentIntent.toJson());
+    public ResponseEntity<String> createPaymentIntent(@RequestBody Payment payment) {
+        try {
+            PaymentIntent paymentIntent = paymentService.createPaymentIntent(payment);    
+            return ResponseEntity.status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(paymentIntent.toJson());
+        } catch (StripeException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(Json.createObjectBuilder().add("error", ex.getMessage()).build().toString());
+        }
     }
 
-    // POST/api/donate
+    // POST /api/donate
     @PostMapping(path="/donate", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveDonation(@RequestBody String jsonString) {
 
          try {
             String transactionId = paymentService.saveDonation(jsonString);
-            return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(Json.createObjectBuilder().add("transaction_id", transactionId).build().toString());
+            return ResponseEntity.status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(Json.createObjectBuilder().add("transaction_id", transactionId).build().toString());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 								.contentType(MediaType.APPLICATION_JSON)

@@ -25,7 +25,6 @@ import { Router } from '@angular/router';
 })
 export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
   form!: FormGroup;
-  loading: boolean = true;
   countries: Country[] = [];
   states: State[] = [];
   storage: Storage = sessionStorage;
@@ -46,34 +45,43 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
   ) {}
 
   ngOnInit(): void {
-    this.loading = true;
-
     // initialize form group
     this.form = this.createForm();
     this.setupStripeFormFields();
 
     // get list of all countries (for dropdown list of select options in billing address)
-    firstValueFrom(this.locationService.getCountries()).then(
-      (countries: Country[]) => {
+    firstValueFrom(this.locationService.getCountries())
+      .then((countries: Country[]) => {
         this.countries = countries;
-      }
-    );
+      })
+      .catch((error) => {
+        alert(error);
+        console.info(error);
+      });
 
     // get the client's current country location to autopopulate the form initially
     // then get the list of states applicable to the particular country
-    this.locationService.getCurrentCountryCode().subscribe((countryCode) => {
-      this.currentCountryCode = countryCode;
-      this.form.get(['billingAddress', 'country'])?.setValue(countryCode);
-      this.locationService
-        .getStatesByCountryCode(countryCode)
-        .subscribe((states) => {
-          this.states = states;
-          this.loading = false;
+    this.locationService.getCurrentCountryCode().subscribe({
+      next: (countryCode) => {
+        this.currentCountryCode = countryCode;
+        this.form.get(['billingAddress', 'country'])?.setValue(countryCode);
+        this.locationService.getStatesByCountryCode(countryCode).subscribe({
+          next: (states) => {
+            this.states = states;
+          },
+          error: (error) => {
+            alert(error);
+            console.info(error);
+          },
         });
+      },
+      error: (error) => {
+        alert(error);
+        console.info(error);
+      },
     });
 
     this.autopopulateFormFields();
-    // this.setupStripeFormFields();
   }
 
   private createForm(): FormGroup {
@@ -219,9 +227,8 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
     // post to backend if form has no errors
     if (!this.form.invalid && this.creditCardErrors.textContent === '') {
       this.isCreditCardProcessing = true;
-      this.paymentService
-        .createPaymentIntent(this.payment)
-        .subscribe((response) => {
+      this.paymentService.createPaymentIntent(this.payment).subscribe({
+        next: (response) => {
           this.transactionId = response.id;
           this.stripe
             .confirmCardPayment(
@@ -267,8 +274,19 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
                   },
                 });
               }
+            })
+            .catch((error: any) => {
+              alert(error);
+              console.info(error);
+              this.isCreditCardProcessing = false;
             });
-        });
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+          this.isCreditCardProcessing = false;
+        },
+      });
     } else {
       this.form.markAllAsTouched();
       return; // do nothing and display all error messages if credit card fields are invalid

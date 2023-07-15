@@ -8,6 +8,7 @@ import sg.edu.nus.iss.server.models.Donor;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -22,7 +23,7 @@ public class EmailService {
         this.senderEmail = senderEmail;
     }
 
-    public String sendDonationReceipt(Donor donor, Donation donation) {
+    public String sendDonationReceipt(Donor donor, Donation donation) throws MailException {
         SimpleMailMessage sms = new SimpleMailMessage();
         sms.setFrom(senderEmail);
         sms.setTo(donor.getEmail());

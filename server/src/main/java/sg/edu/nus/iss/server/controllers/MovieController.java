@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import sg.edu.nus.iss.server.exceptions.DatabaseException;
 import sg.edu.nus.iss.server.models.Genre;
 import sg.edu.nus.iss.server.models.Movie;
 import sg.edu.nus.iss.server.models.ViewHistory;
@@ -45,43 +47,61 @@ public class MovieController {
     @GetMapping(path="/movie-genres", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getAllGenres() {
-        List<Genre> genres = movieService.getAllGenres();
-		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-		for (Genre genre: genres) {
-            if (genre != null) {
-                jsonArrayBuilder.add(genre.toJson());
-            }
-		}
-		return ResponseEntity.status(HttpStatus.OK)
+        try {
+            List<Genre> genres = movieService.getAllGenres();
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+            for (Genre genre: genres) {
+                if (genre != null) {
+                    jsonArrayBuilder.add(genre.toJson());
+                }
+		    }
+		    return ResponseEntity.status(HttpStatus.OK)
 							.contentType(MediaType.APPLICATION_JSON)
 							.body(jsonArrayBuilder.build().toString());
+        } catch (DataAccessException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+							.contentType(MediaType.APPLICATION_JSON)
+							.body(Json.createObjectBuilder().add("error", ex.getMessage()).build().toString());
+        }
     }
 
     // GET /api/movie-genres/:genre
     @GetMapping(path="/movie-genres/{genre}", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getMoviesByGenre(@PathVariable(required=true) String genre) {
-        List<Movie> movies = movieService.getMoviesByGenre(genre);
-		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-		for (Movie movie: movies) {
-            if (movie != null) {
+        try {
+
+            List<Movie> movies = movieService.getMoviesByGenre(genre);
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+            for (Movie movie: movies) {
+                if (movie != null) {
                 jsonArrayBuilder.add(movie.toJson());
-            }
-		}
-		return ResponseEntity.status(HttpStatus.OK)
+                }
+		    }
+		    return ResponseEntity.status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(jsonArrayBuilder.build().toString());
+        } catch (DataAccessException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 							.contentType(MediaType.APPLICATION_JSON)
-							.body(jsonArrayBuilder.build().toString());
-    }
+							.body(Json.createObjectBuilder().add("error", ex.getMessage()).build().toString());
+        }
+}
 
     // GET /api/movie/:id
     @GetMapping(path="/movie/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getMovieById(@PathVariable Integer id) {
-        Optional<Movie> opt = movieService.getMovieById(id);
-        return ResponseEntity.status(HttpStatus.OK)
+        try {
+            Optional<Movie> opt = movieService.getMovieById(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(opt.get().toJson().build().toString());
+        } catch (DataAccessException ex) {
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 							.contentType(MediaType.APPLICATION_JSON)
-							.body(opt.get().toJson().build().toString());
-
+							.body(Json.createObjectBuilder().add("error", ex.getMessage()).build().toString());
+        }
     }
 
     // PUT /api/view-history
@@ -104,32 +124,39 @@ public class MovieController {
 											.build()
 											.toString());
 		
-		} catch (IOException ex){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		} catch (IOException | DatabaseException ex){
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 								.contentType(MediaType.APPLICATION_JSON)
 								.body(Json.createObjectBuilder().add("error", ex.getMessage())
 																.build().toString());
 		}
     }
 
-    // PUT /api/view-history?email=fred@gmail.com&movieId=1
+    // GET /api/view-history?email=fred@gmail.com&movieId=1
     @GetMapping(path="/view-history", produces=MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getViewHistory(@RequestParam(required = true) String email, @RequestParam(required = true) Integer movieId) {
-        String result = viewHistoryService.getElapsedTimeByEmailAndMovieId(email, movieId);
-        if (result != null) {
-            return ResponseEntity.status(HttpStatus.OK)
-								.contentType(MediaType.APPLICATION_JSON)
-								.body(Json.createObjectBuilder()
+        try {
+            String result = viewHistoryService.getElapsedTimeByEmailAndMovieId(email, movieId);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .body(Json.createObjectBuilder()
                                             .add("elapsed_time", result)
 											.build()
 											.toString());
-        } 
-        return ResponseEntity.status(HttpStatus.OK)
-								.contentType(MediaType.APPLICATION_JSON)
-								.body(Json.createObjectBuilder()
+             } 
+            return ResponseEntity.status(HttpStatus.OK)
+								    .contentType(MediaType.APPLICATION_JSON)
+								    .body(Json.createObjectBuilder()
                                             .add("elapsed_time", 0)
 											.build()
 											.toString());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+								.contentType(MediaType.APPLICATION_JSON)
+								.body(Json.createObjectBuilder().add("error", ex.getMessage())
+																.build().toString());
+        }
     }
 }
