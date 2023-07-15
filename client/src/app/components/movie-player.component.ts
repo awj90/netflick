@@ -12,6 +12,7 @@ import {
 import { Movie } from '../models/movie';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { ViewHistory } from '../models/view-history';
+import { Title } from '@angular/platform-browser';
 
 declare var YT: any;
 
@@ -35,7 +36,8 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private movieService: MovieService,
-    private handGestureService: HandGestureService
+    private handGestureService: HandGestureService,
+    private title: Title
   ) {}
 
   ngOnInit(): void {
@@ -121,7 +123,10 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     this.movieService
       .getMovieById(id)
       .pipe(
-        tap((movie) => (this.movie = movie)),
+        tap((movie) => {
+          this.movie = movie;
+          this.title.setTitle(`Netflick | Now Playing: ${movie.title}`);
+        }),
         map((movie) => movie.video_id)
       )
       .subscribe((id) => {

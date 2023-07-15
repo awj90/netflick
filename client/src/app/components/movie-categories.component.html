@@ -25,9 +25,7 @@
           <div class="image-wrapper">
             <a (click)="navigateToMoviesInSelectedGenre(genre)">
               <img
-                src="https://netflick.sgp1.cdn.digitaloceanspaces.com/{{
-                  genre.genre_name
-                }}.png"
+                src="assets/img/{{ genre.genre_name }}.png"
                 alt="{{ genre.genre_name }}"
                 style="cursor: pointer"
               />

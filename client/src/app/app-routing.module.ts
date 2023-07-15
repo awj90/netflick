@@ -15,20 +15,41 @@ const appRoutes: Routes = [
   {
     path: 'donate',
     component: DonationFormComponent,
+    title: 'Netflick | Make a Donation',
     canDeactivate: [formGuard],
   },
   { path: 'login/callback', component: OktaCallbackComponent },
-  { path: 'login', component: LoginComponent },
+  {
+    path: 'login',
+    title: 'Netflick | Sign In',
+    component: LoginComponent,
+  },
   {
     path: 'movie/:id/player',
     component: MoviePlayerComponent,
+    title: 'Netflick | Now Playing',
     canActivate: [OktaAuthGuard],
     data: { onAuthRequired: authGuard },
   },
-  { path: 'movie/:id', component: MovieDetailsComponent },
-  { path: 'movie-genres/:genre', component: MoviesComponent },
-  { path: 'movie-genres', component: MovieCategoriesComponent },
-  { path: '', component: LandingPageComponent },
+  {
+    path: 'movie/:id',
+    title: 'Netflick | Watch Movie',
+    component: MovieDetailsComponent,
+  },
+  {
+    path: 'movie-genres/:genre',
+    component: MoviesComponent,
+  },
+  {
+    path: 'movie-genres',
+    title: 'Netflick | Browse movie genres',
+    component: MovieCategoriesComponent,
+  },
+  {
+    path: '',
+    title: 'Netflick | Home',
+    component: LandingPageComponent,
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

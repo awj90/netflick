@@ -5,6 +5,7 @@ import { debounceTime, filter, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Movie } from '../models/movie';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-movies',
@@ -23,7 +24,8 @@ export class MoviesComponent implements OnInit, OnDestroy {
     private handGestureService: HandGestureService,
     private movieService: MovieService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private title: Title
   ) {}
 
   ngOnInit() {
@@ -31,6 +33,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.handGestureService.resetLast();
 
     const newGenre: string = this.activatedRoute.snapshot.params['genre'];
+    this.title.setTitle(`Netflick | Browse ${newGenre} movies`);
     const previousGenre = this.storage.getItem('selectedGenreName');
 
     this.getMovies(previousGenre, newGenre);
