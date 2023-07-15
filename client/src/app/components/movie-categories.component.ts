@@ -3,7 +3,7 @@ import { Genre } from '../models/genre';
 import { Subscription, debounceTime, filter, tap } from 'rxjs';
 import { HandGestureService } from '../services/hand-gesture.service';
 import { MovieService } from '../services/movie.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-categories',
@@ -21,7 +21,8 @@ export class MovieCategoriesComponent {
   constructor(
     private handGestureService: HandGestureService,
     private movieService: MovieService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -40,7 +41,11 @@ export class MovieCategoriesComponent {
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
         filter(
-          (value) => value === 'one' || value === 'two' || value === 'three'
+          (value) =>
+            value === 'one' ||
+            value === 'two' ||
+            value === 'three' ||
+            value === 'back'
         ),
         debounceTime(500)
       )
@@ -59,6 +64,9 @@ export class MovieCategoriesComponent {
           this.navigateToMoviesInSelectedGenre(
             this.nestedGenres[this.carouselIndex][2]
           );
+        }
+        if (value === 'back') {
+          this.router.navigate(['../'], { relativeTo: this.activatedRoute });
         }
       });
   }
