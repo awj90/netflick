@@ -1,5 +1,7 @@
 package sg.edu.nus.iss.server.repositories;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,6 +30,14 @@ public class ViewHistoryRepository {
             return (String) redisTemplate.opsForHash().get(email, movieId.toString());
         } catch (Exception ex) {
             throw new DatabaseException("Error fetching progress of watched movie.\nUser: %s\nMovieId: %s".formatted(email, movieId));
+        }
+    }
+
+    public Set<Object> getWatchedMovies(String email) throws DatabaseException {
+        try {
+            return redisTemplate.opsForHash().keys(email);
+        } catch (Exception ex) {
+            throw new DatabaseException("Error fetching watched movies.\nUser: %s".formatted(email));
         }
     }
 }

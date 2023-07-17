@@ -183,7 +183,10 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     let currentVideoTime: number = this.player.getCurrentTime();
     this.intervalId = setInterval(() => {
       currentVideoTime += 10;
-      this.player.seekTo(currentVideoTime, true);
+      this.player.seekTo(
+        Math.min(currentVideoTime, this.player.getDuration()),
+        true
+      );
     }, 1000); // use interval to keep fastforwarding until stopped
   }
 
@@ -192,7 +195,7 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     let currentVideoTime: number = this.player.getCurrentTime();
     this.intervalId = setInterval(() => {
       currentVideoTime -= 10;
-      this.player.seekTo(currentVideoTime, true);
+      this.player.seekTo(Math.max(currentVideoTime, 0), true);
     }, 1000); // use interval to keep rewinding until stopped
   }
 }

@@ -51,4 +51,13 @@ export class MovieService {
       }
     );
   }
+
+  getWatchedMovies(email: string): Observable<Movie[]> {
+    return this.http.get<Movie[]>(
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/watched-movies`,
+      {
+        params: new HttpParams().set('email', email),
+      }
+    );
+  }
 }

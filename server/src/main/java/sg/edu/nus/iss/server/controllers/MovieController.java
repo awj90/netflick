@@ -159,4 +159,27 @@ public class MovieController {
 																.build().toString());
         }
     }
+
+    // GET /api/watched-movies?email=fred@gmail.com
+    @GetMapping(path="/watched-movies", produces=MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> getWatchedMovies(@RequestParam(required=true) String email) {
+        try {
+            List<Movie> watchedMovies = viewHistoryService.getWatchedMovies(email);
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+            for (Movie movie: watchedMovies) {
+                if (movie != null) {
+                jsonArrayBuilder.add(movie.toJson());
+                }
+		    }
+		    return ResponseEntity.status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(jsonArrayBuilder.build().toString());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+								.contentType(MediaType.APPLICATION_JSON)
+								.body(Json.createObjectBuilder().add("error", ex.getMessage())
+																.build().toString());
+        }
+    }
 }

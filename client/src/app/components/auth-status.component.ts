@@ -1,8 +1,11 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { OKTA_AUTH, OktaAuthStateService } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
-import { Subscription } from 'rxjs';
+import { Subscription, firstValueFrom } from 'rxjs';
 import { User } from '../models/user';
+import { Movie } from '../models/movie';
+import { MovieService } from '../services/movie.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-status',
@@ -15,10 +18,13 @@ export class AuthStatusComponent implements OnInit, OnDestroy {
   hour: number = new Date().getHours() + 1;
   authState$!: Subscription;
   storage: Storage = sessionStorage;
+  watchedMovies$!: Promise<Movie[]>;
 
   constructor(
     @Inject(OKTA_AUTH) private oktaAuth: OktaAuth,
-    private oktaAuthStateService: OktaAuthStateService
+    private oktaAuthStateService: OktaAuthStateService,
+    private movieService: MovieService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +40,9 @@ export class AuthStatusComponent implements OnInit, OnDestroy {
               'user',
               JSON.stringify(new User(this.username, lastName, email))
             );
+            this.watchedMovies$ = firstValueFrom(
+              this.movieService.getWatchedMovies(email)
+            );
           });
         }
       },
@@ -47,6 +56,10 @@ export class AuthStatusComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // clean up subscriptions
     this.authState$.unsubscribe();
+  }
+
+  resumeMovie(watchedMovie: Movie) {
+    this.router.navigate(['/movie', watchedMovie.id.toString(), 'player']);
   }
 
   logout() {
