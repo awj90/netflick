@@ -1,0 +1,43 @@
+<form class="d-flex" role="search" [formGroup]="form">
+  <mat-form-field class="search-form-field" color="warn">
+    <mat-label>Search Movies</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Search Movies"
+      formControlName="keyword"
+      #keyword
+      (keyup.enter)="searchProducts(keyword.value)"
+    />
+    <button
+      type="button"
+      *ngIf="keyword.value.length > 0"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="clearSearch()"
+      [ngStyle]="{ color: 'white' }"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <button
+    mat-icon-button
+    type="button"
+    (click)="searchProducts(keyword.value)"
+    [ngStyle]="{ color: 'white' }"
+  >
+    <mat-icon>search</mat-icon>
+  </button>
+</form>
+<div *ngIf="keyword.value.trim().length > 0" class="search-container">
+  <ul *ngIf="searchResults$ | async as results" class="search-results">
+    <li
+      *ngFor="let result of results"
+      (click)="onClickingSearchResult(result.id)"
+      style="cursor: pointer"
+    >
+      {{ result.title }}
+    </li>
+  </ul>
+</div>

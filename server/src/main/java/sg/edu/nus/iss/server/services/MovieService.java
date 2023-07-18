@@ -22,10 +22,14 @@ public class MovieService {
     }
 
     public List<Movie> getMoviesByGenre(String genre) throws DataAccessException {
-        return this.movieRepository.getMoviesByGenre(genre);
+        return movieRepository.getMoviesByGenre(genre);
     }
 
     public Optional<Movie> getMovieById(Integer id) throws DataAccessException {
-        return this.movieRepository.getMovieById(id);
+        return movieRepository.getMovieById(id);
+    }
+
+    public List<Movie> searchMoviesByKeyword(String keyword) throws DataAccessException {
+        return movieRepository.searchMoviesByKeyword(keyword);
     }
 }

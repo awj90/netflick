@@ -30,6 +30,7 @@ export class AuthInterceptorService implements HttpInterceptor {
       environment['serverApiUrl'];
     const protectedEndPoints: string[] = [
       `${SPRINGBOOT_BASE_API_URL_ENDPOINT}/view-history`,
+      `${SPRINGBOOT_BASE_API_URL_ENDPOINT}/watched-movies`,
     ];
 
     // if request's url is applicable, get an access token from auth server

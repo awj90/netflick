@@ -11,6 +11,7 @@ import { Genre } from '../models/genre';
 })
 export class MovieService {
   SPRINGBOOT_BASE_API_URL_ENDPOINT: string = environment['serverApiUrl'];
+  searchMode: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -57,6 +58,15 @@ export class MovieService {
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/watched-movies`,
       {
         params: new HttpParams().set('email', email),
+      }
+    );
+  }
+
+  searchMoviesByKeyword(key: string): Observable<Movie[]> {
+    return this.http.get<Movie[]>(
+      `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/search`,
+      {
+        params: new HttpParams().set('key', key),
       }
     );
   }

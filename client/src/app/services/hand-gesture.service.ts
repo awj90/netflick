@@ -103,7 +103,6 @@ export class HandGestureService {
           : 0
       );
       gesture = gestures[0].name;
-      console.info(gesture);
     }
     if (this._lastGesture !== gesture) {
       this._lastGesture = gesture;

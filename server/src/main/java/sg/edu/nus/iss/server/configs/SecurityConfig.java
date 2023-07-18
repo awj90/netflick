@@ -15,7 +15,7 @@ public class SecurityConfig {
    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
        http.authorizeHttpRequests(requests ->
                requests
-                       .requestMatchers("api/view-history/**")
+                       .requestMatchers("api/view-history/**", "api/watched-movies/**")
                        .authenticated()
                        .anyRequest().permitAll())
                .oauth2ResourceServer(server -> server

@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './components/landing-page.component';
@@ -17,6 +17,7 @@ import { MoviePlayerComponent } from './components/movie-player.component';
 import { LoginComponent } from './components/login.component';
 import { AuthStatusComponent } from './components/auth-status.component';
 import { DonationFormComponent } from './components/donation-form.component';
+import { SearchComponent } from './components/search.component';
 
 import { OktaAuthModule, OktaConfig } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
@@ -53,6 +54,7 @@ const moduleConfig: OktaConfig = { oktaAuth };
     LoginComponent,
     AuthStatusComponent,
     DonationFormComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

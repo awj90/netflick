@@ -47,4 +47,14 @@ public class MovieRepository {
         }
         return Optional.of(Movie.create(rs));
     }
+
+    public List<Movie> searchMoviesByKeyword(String keyword) throws DataAccessException {
+        List<Movie> movies = new LinkedList<>();
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(SQL_SELECT_MOVIES_BY_SEARCH_KEY, new Object[] {"%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%"});
+
+        while (rs.next()) {
+            movies.add(Movie.create(rs));
+        }
+        return movies;
+    }
 }

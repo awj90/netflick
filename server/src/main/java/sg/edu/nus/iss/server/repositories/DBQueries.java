@@ -8,6 +8,7 @@ public class DBQueries {
     // movies table
     public static final String SQL_SELECT_MOVIES_BY_GENRE = "select movies.id, movies.title, movies.description, movies.video_id, languages.language_name, movies.video_duration, movies.genre from movies join languages on movies.language_id = languages.id where movies.genre like ?";
     public static final String SQL_SELECT_MOVIE_BY_ID = "select movies.id, movies.title, movies.description, movies.video_id, languages.language_name, movies.video_duration, movies.genre from movies join languages on movies.language_id = languages.id where movies.id = ?";
+    public static final String SQL_SELECT_MOVIES_BY_SEARCH_KEY = "select movies.id, movies.title, movies.description, movies.video_id, languages.language_name, movies.video_duration, movies.genre from movies join languages on movies.language_id = languages.id where movies.title like ? or movies.description like ? or movies.genre like ?";
 
     // countries and states table
     public static final String SQL_SELECT_ALL_COUNTRIES = "select * from countries";

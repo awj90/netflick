@@ -28,6 +28,7 @@ export class MovieCategoriesComponent {
   ngOnInit() {
     this.loading = true;
     this.handGestureService.resetLast();
+    this.movieService.searchMode = false;
     this.getGenres();
     this.swipeSubscription$ = this.handGestureService.swipe$
       .pipe(

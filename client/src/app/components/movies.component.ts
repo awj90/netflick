@@ -32,11 +32,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.handGestureService.resetLast();
 
-    const newGenre: string = this.activatedRoute.snapshot.params['genre'];
-    this.title.setTitle(`Netflick | Browse ${newGenre} movies`);
-    const previousGenre = this.storage.getItem('selectedGenreName');
-
-    this.getMovies(previousGenre, newGenre);
+    this.activatedRoute.params.subscribe(() => this.getMovies());
 
     this.swipeSubscription$ = this.handGestureService.swipe$
       .pipe(
@@ -104,7 +100,57 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.router.navigate(['movie', this.movies[index].id]);
   }
 
-  getMovies(previousGenre: string | null, newGenre: string) {
+  private getMovies() {
+    this.loading = true;
+    this.movies = [];
+    if (this.activatedRoute.snapshot.paramMap.has('keyword')) {
+      const newSearchKey = this.activatedRoute.snapshot.params['keyword'];
+      this.title.setTitle(`Netflick | Search ${newSearchKey}`);
+      const previousSearchKey = this.storage.getItem('searchKey');
+      this.getMoviesBySearchKey(previousSearchKey, newSearchKey);
+      return;
+    }
+    if (this.activatedRoute.snapshot.paramMap.has('genre')) {
+      const newGenre: string = this.activatedRoute.snapshot.params['genre'];
+      this.title.setTitle(`Netflick | Browse ${newGenre} movies`);
+      const previousGenre = this.storage.getItem('selectedGenreName');
+      this.getMoviesByGenre(previousGenre, newGenre);
+      return;
+    }
+  }
+
+  private getMoviesBySearchKey(
+    previousSearchKey: string | null,
+    newSearchKey: string
+  ) {
+    if (previousSearchKey === null || previousSearchKey !== newSearchKey) {
+      this.storage.setItem('searchKey', newSearchKey);
+      this.movieService.searchMoviesByKeyword(newSearchKey).subscribe({
+        next: (results) => {
+          this.movies = results;
+          this.storage.setItem('movies', JSON.stringify(results));
+          this.loading = false;
+        },
+        error: (error) => {
+          alert(error);
+          console.info(error);
+          this.loading = false;
+        },
+      });
+    } else {
+      const value = this.storage.getItem('movies');
+      if (value !== null) {
+        this.movies = JSON.parse(value);
+        const index = this.storage.getItem('selectedMovieCarouselIndex');
+        if (index !== null) {
+          this.carouselIndex = +index;
+        }
+      }
+      this.loading = false;
+    }
+  }
+
+  private getMoviesByGenre(previousGenre: string | null, newGenre: string) {
     if (previousGenre === null || previousGenre !== newGenre) {
       this.storage.setItem('selectedGenreName', newGenre);
       this.movieService.getMoviesByGenre(newGenre).subscribe({

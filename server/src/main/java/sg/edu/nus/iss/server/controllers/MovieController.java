@@ -86,7 +86,7 @@ public class MovieController {
 							.contentType(MediaType.APPLICATION_JSON)
 							.body(Json.createObjectBuilder().add("error", ex.getMessage()).build().toString());
         }
-}
+    }
 
     // GET /api/movie/:id
     @GetMapping(path="/movie/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
@@ -180,6 +180,28 @@ public class MovieController {
 								.contentType(MediaType.APPLICATION_JSON)
 								.body(Json.createObjectBuilder().add("error", ex.getMessage())
 																.build().toString());
+        }
+    }
+
+    // GET /api/search?key=revenge
+    @GetMapping(path="/search", produces=MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> searchMoviesByKeyword(@RequestParam(required=true) String key) {
+        try {
+            List<Movie> movies = movieService.searchMoviesByKeyword(key);
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+            for (Movie movie: movies) {
+                if (movie != null) {
+                jsonArrayBuilder.add(movie.toJson());
+                }
+		    }
+		    return ResponseEntity.status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(jsonArrayBuilder.build().toString());
+        } catch (DataAccessException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+							.contentType(MediaType.APPLICATION_JSON)
+							.body(Json.createObjectBuilder().add("error", ex.getMessage()).build().toString());
         }
     }
 }

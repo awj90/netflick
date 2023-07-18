@@ -76,7 +76,13 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
     this.selectSubscription$ = this.handGestureService.gesture$
       .pipe(
         tap((value) => console.info('Gestured: ', value)),
-        filter((value) => value === 'zero' || value === 'back'),
+        filter(
+          (value) =>
+            value === 'zero' ||
+            value === 'back' ||
+            value === 'one' ||
+            value === 'two'
+        ),
         debounceTime(500)
       )
       .subscribe({
@@ -95,6 +101,12 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
           if (value === 'back') {
             this.player.stopVideo();
             this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+          }
+          if (value === 'one') {
+            this.player.setPlaybackRate(1);
+          }
+          if (value === 'two') {
+            this.player.setPlaybackRate(2);
           }
         },
         error: (error) => {
@@ -121,6 +133,10 @@ export class MoviePlayerComponent implements OnInit, OnDestroy {
   }
 
   saveViewHistory() {
+    const user = this.storage.getItem('user');
+    if (!!user) {
+      this.userEmail = JSON.parse(user).email;
+    }
     const viewHistory: ViewHistory = {
       email: this.userEmail,
       movie_id: this.movie.id.toString(),

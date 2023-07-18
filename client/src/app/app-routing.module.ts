@@ -15,7 +15,7 @@ const appRoutes: Routes = [
   {
     path: 'donate',
     component: DonationFormComponent,
-    title: 'Netflick | Make a Donation',
+    title: 'Netflick | Donate',
     canDeactivate: [formGuard],
   },
   { path: 'login/callback', component: OktaCallbackComponent },
@@ -38,6 +38,10 @@ const appRoutes: Routes = [
   },
   {
     path: 'movie-genres/:genre',
+    component: MoviesComponent,
+  },
+  {
+    path: 'search/:keyword',
     component: MoviesComponent,
   },
   {

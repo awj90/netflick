@@ -39,7 +39,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (value) => {
           if (value === 'back') {
-            this.navigateToMovieGenres();
+            this.navigateBack();
           }
           if (value === 'ok') {
             this.router.navigate(['./player'], {
@@ -63,10 +63,28 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     this.movie$ = firstValueFrom(this.movieService.getMovieById(id));
   }
 
+  navigateBack() {
+    if (this.movieService.searchMode === false) {
+      this.navigateToMovieGenres();
+    }
+    if (this.movieService.searchMode === true) {
+      this.navigateToSearchResults();
+    }
+  }
+
   navigateToMovieGenres() {
     const value = this.storage.getItem('selectedGenreName');
     if (value !== null) {
       this.router.navigate(['/movie-genres', value]);
+    } else {
+      this.router.navigate(['/movie-genres']);
+    }
+  }
+
+  navigateToSearchResults() {
+    const value = this.storage.getItem('searchKey');
+    if (value !== null) {
+      this.router.navigate(['/search', value]);
     } else {
       this.router.navigate(['/movie-genres']);
     }
