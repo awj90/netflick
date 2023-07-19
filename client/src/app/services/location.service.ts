@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Country } from '../models/country';
 import { State } from '../models/state';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationService {
   SPRINGBOOT_BASE_API_URL_ENDPOINT: string = environment['serverApiUrl'];
-  EXTERNAL_IP_GEOLOCATION_API_URL_ENDPOINT: string = 'https://jsonip.com/';
+  EXTERNAL_IP_GEOLOCATION_API_URL_ENDPOINT: string = 'https://jsonip.com/'; // access API from client as server may be located elsewhere
 
   constructor(private http: HttpClient) {}
 

@@ -51,7 +51,7 @@ twoGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
 twoGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
 twoGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.FullCurl);
 
-// HAND GESTURE FOR THREE
+// HAND GESTURE FOR THREE 👌
 const threeGesture = new fingerpose.GestureDescription('three');
 threeGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.FullCurl);
 threeGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.NoCurl);
@@ -59,13 +59,6 @@ threeGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.NoCurl);
 threeGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.NoCurl);
 threeGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
 threeGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.FullCurl);
-// const threeGesture = new fingerpose.GestureDescription('three');
-// threeGesture.addCurl(fingerpose.Finger.Index, fingerpose.FingerCurl.NoCurl);
-// threeGesture.addCurl(fingerpose.Finger.Middle, fingerpose.FingerCurl.NoCurl);
-// threeGesture.addCurl(fingerpose.Finger.Ring, fingerpose.FingerCurl.NoCurl);
-// threeGesture.addCurl(fingerpose.Finger.Pinky, fingerpose.FingerCurl.FullCurl);
-// threeGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.HalfCurl);
-// threeGesture.addCurl(fingerpose.Finger.Thumb, fingerpose.FingerCurl.FullCurl);
 
 // HAND GESTURE FOR BACK 👈
 const backGesture = new fingerpose.GestureDescription('back');

@@ -17,7 +17,10 @@
         >
           Continue Watching
         </button>
-        <ul class="dropdown-menu dropdown-menu-dark">
+        <ul
+          class="dropdown-menu dropdown-menu-dark"
+          style="max-height: 200px; overflow-y: auto"
+        >
           <li *ngFor="let watchedMovie of watchedMovies">
             <a
               class="dropdown-item"

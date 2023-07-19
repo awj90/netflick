@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Genre } from '../models/genre';
 import { Subscription, debounceTime, filter, tap } from 'rxjs';
 import { HandGestureService } from '../services/hand-gesture.service';
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './movie-categories.component.html',
   styleUrls: ['./movie-categories.component.css'],
 })
-export class MovieCategoriesComponent {
+export class MovieCategoriesComponent implements OnInit, OnDestroy{
   nestedGenres: Genre[][] = []; // array of arrays eg. [ ['Action', 'Adventure', 'Comedy'], ['Drama', 'Family', 'Horror'], ... ]
   carouselIndex: number = 0;
   swipeSubscription$!: Subscription;

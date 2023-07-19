@@ -10,9 +10,9 @@ import {
 export const slideInAnimation = trigger('slideInAnimation', [
   // Transition between any two states
   transition('* <=> *', [
-    // Applicable events are entering and leaving component
+    // Applicable events are entering and leaving components
     // Defined style and animation functions to apply
-    // Config object with optional set to true to handle when element not yet added to the DOM
+    // Configure object with optional set to true to handle when element has not yet been added to the DOM
     query(
       ':enter, :leave',
       style({ position: 'fixed', width: '100%', zIndex: 2 }),

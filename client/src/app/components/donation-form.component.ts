@@ -12,7 +12,7 @@ import { LocationService } from '../services/location.service';
 import { State } from '../models/state';
 import { User } from '../models/user';
 import { BeforeLeavingComponent } from '../utils/form-guard';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { PaymentIntent } from '../models/payment-intent';
 import { PaymentService } from '../services/payment.service';
 import { Donation } from '../models/donation';
