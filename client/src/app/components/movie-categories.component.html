@@ -25,7 +25,9 @@
           <div class="image-wrapper">
             <a (click)="navigateToMoviesInSelectedGenre(genre)">
               <img
-                src="https://netflick-store.sgp1.cdn.digitaloceanspaces.com/{{ genre.genre_name }}.png"
+                src="https://netflick-store.sgp1.cdn.digitaloceanspaces.com/{{
+                  genre.genre_name
+                }}.png"
                 alt="{{ genre.genre_name }}"
                 style="cursor: pointer"
               />
@@ -37,7 +39,7 @@
   </div>
   <button
     class="carousel-control-prev"
-    style="top: 15%"
+    style="top: 39%; bottom: 39%; left: 8vw"
     type="button"
     (click)="moveCarousel('left')"
   >
@@ -46,7 +48,7 @@
   </button>
   <button
     class="carousel-control-next"
-    style="top: 15%"
+    style="top: 39%; bottom: 39%; right: 8vw"
     type="button"
     (click)="moveCarousel('right')"
   >

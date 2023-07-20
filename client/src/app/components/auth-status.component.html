@@ -33,17 +33,13 @@
       </li>
     </ul>
   </div>
-  <div *ngIf="isAuthenticated && username" class="login-status-user-info">
-    Good {{ hour < 12 ? "Morning" : hour < 17 ? "Afternoon" : "Evening" }},
-    {{ username | titlecase }}!
-  </div>
   <button
     *ngIf="!isAuthenticated"
     [routerLink]="['/login']"
     type="button"
     class="btn btn-dark btn-sm"
   >
-    Sign In
+    Log In
   </button>
   <button
     *ngIf="isAuthenticated"
@@ -51,6 +47,10 @@
     type="button"
     class="btn btn-dark btn-sm"
   >
-    Sign Out
+    Log Out
   </button>
+  <div *ngIf="isAuthenticated && username" class="login-status-user-info">
+    Good {{ hour < 12 ? "Morning" : hour < 17 ? "Afternoon" : "Evening" }},
+    {{ username | titlecase }}!
+  </div>
 </div>

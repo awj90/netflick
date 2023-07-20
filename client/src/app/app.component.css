@@ -16,10 +16,10 @@
 
 .video-container {
   position: fixed;
-  top: 0;
+  top: 108px;
   right: 0;
-  width: 640px;
-  height: 480px;
+  width: 600px;
+  height: 450px;
 }
 
 .black-background {

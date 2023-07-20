@@ -31,13 +31,17 @@
   </button>
 </form>
 <div *ngIf="keyword.value.trim().length > 0" class="search-container">
-  <ul *ngIf="searchResults$ | async as results" class="search-results">
+  <ul
+    *ngIf="searchResults$ | async as results"
+    class="search-results dropdown-menu"
+  >
     <li
       *ngFor="let result of results"
       (click)="onClickingSearchResult(result.id)"
       style="cursor: pointer"
+      class="dropdown-item"
     >
-      {{ result.title }}
+      {{ result.title.split("|")[0] }}
     </li>
   </ul>
 </div>
