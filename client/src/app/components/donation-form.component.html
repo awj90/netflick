@@ -320,7 +320,7 @@
               type="submit"
               [disabled]="form.invalid || isCreditCardProcessing"
             >
-              Confirm
+              {{ isCreditCardProcessing ? "Processing..." : "Confirm" }}
             </button>
           </td>
         </tr>

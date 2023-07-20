@@ -47,6 +47,7 @@ export class DonationFormComponent implements OnInit, BeforeLeavingComponent {
   ngOnInit(): void {
     // initialize form group
     this.form = this.createForm();
+    this.form.get('agreeToTermsAndConditions')?.disable();
     this.setupStripeFormFields();
 
     // get list of all countries (for dropdown list of select options in billing address)
