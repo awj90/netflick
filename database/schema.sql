@@ -3,6 +3,9 @@ drop database if exists moviedb;
 create database moviedb;
 use moviedb;
 
+-- railway
+use railway;
+
 -- genres
 DROP TABLE IF EXISTS `genres`;
 CREATE TABLE `genres` (
@@ -43,7 +46,7 @@ CREATE TABLE `movies` (
 	foreign key(`language_id`) references languages(`id`)
 );
 
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/movies.csv' 
+LOAD DATA LOCAL INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/movies.csv' 
 INTO TABLE movies 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
@@ -60,7 +63,7 @@ CREATE TABLE `countries` (
   unique (`code`)
 );
 
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/countries.csv' 
+LOAD DATA LOCAL INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/countries.csv' 
 INTO TABLE countries 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
@@ -77,7 +80,7 @@ CREATE TABLE `states` (
   foreign key(`country_id`) references countries(`id`)
 );
 
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/states.csv' 
+LOAD DATA LOCAL INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/states.csv' 
 INTO TABLE states 
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"'
