@@ -32,7 +32,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.handGestureService.resetLast();
 
-    this.activatedRoute.params.subscribe(() => this.getMovies());
+    this.activatedRoute.params.subscribe(() => this.getMovies()); // activated route subscriptions are unsubscribed automatically by ng
 
     this.swipeSubscription$ = this.handGestureService.swipe$
       .pipe(

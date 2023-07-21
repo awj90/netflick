@@ -15,12 +15,14 @@ export class MovieService {
 
   constructor(private http: HttpClient) {}
 
+  // GET /api/movie-genres
   getGenres(): Observable<Genre[]> {
     return this.http.get<Genre[]>(
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movie-genres`
     );
   }
 
+  // GET /api/movie-genres/:genre
   getMoviesByGenre(genre: string): Observable<Movie[]> {
     console.info('loading');
     return this.http.get<Movie[]>(
@@ -28,12 +30,14 @@ export class MovieService {
     );
   }
 
+  // GET /api/movie/:id
   getMovieById(id: number): Observable<Movie> {
     return this.http.get<Movie>(
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/movie/${id}`
     );
   }
 
+  // PUT /api/view-history
   saveViewHistory(viewHistory: ViewHistory) {
     return this.http.put<ViewHistory>(
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/view-history`,
@@ -41,6 +45,7 @@ export class MovieService {
     );
   }
 
+  // GET /api/view-history?email=fred@gmail.com&movieId=1
   getViewHistory(
     email: string,
     movieId: number
@@ -53,6 +58,7 @@ export class MovieService {
     );
   }
 
+  // GET /api/watched-movies?email=fred@gmail.com
   getWatchedMovies(email: string): Observable<Movie[]> {
     return this.http.get<Movie[]>(
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/watched-movies`,
@@ -62,6 +68,7 @@ export class MovieService {
     );
   }
 
+  // GET /api/search?key=revenge
   searchMoviesByKeyword(key: string): Observable<Movie[]> {
     return this.http.get<Movie[]>(
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/search`,

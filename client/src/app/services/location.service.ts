@@ -30,6 +30,7 @@ export class LocationService {
     );
   }
 
+  // GET /api/states?countryCode=SG
   getStatesByCountryCode(countryCode: string): Observable<State[]> {
     return this.http.get<State[]>(
       `${this.SPRINGBOOT_BASE_API_URL_ENDPOINT}/states`,
